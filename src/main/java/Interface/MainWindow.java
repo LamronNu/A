@@ -1,9 +1,15 @@
 package Interface;
 
+import Library.Consts;
+import WebService.Domain.Lot;
 import WebService.General.AuctionWs;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.BaseTheme;
 import org.apache.log4j.Logger;
+
+import java.util.Date;
+import java.util.List;
 
 class MainWindow extends Window implements BasicWindow{
 //    public static void main(String[] args) {
@@ -13,16 +19,17 @@ class MainWindow extends Window implements BasicWindow{
     private static final Logger log = Logger.getLogger(MainWindow.class);
     private final AuctionWs auction;
     private final String userName;
+    private final Table lotsTable;
     private VerticalLayout lotDetailsPanel;
     private FormLayout bidsPanel;
-    private FormLayout lotsPanel;
+    private HorizontalLayout lotsPanel;
 
     private final UI parentWindow;
     private int userId;
     private String resultType;
 
     public MainWindow(UI components, int userId) {
-        super("Registration"); // Set window caption
+        super("Auction"); // Set window caption
         center();
         //init auction variables
         parentWindow = components;
@@ -37,17 +44,60 @@ class MainWindow extends Window implements BasicWindow{
         content.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         VerticalLayout mainFrame = new VerticalLayout();
         content.addComponent(mainFrame);
+        //top info
         HorizontalLayout topFrame = new HorizontalLayout();
         topFrame.setHeight(50, Unit.POINTS);
+        topFrame.setSizeUndefined();
+        //components
+        Label auctionLabel = new Label("<H1>Auction</H1>", ContentMode.HTML);
+        topFrame.addComponent(auctionLabel);
+        topFrame.setComponentAlignment(auctionLabel, Alignment.MIDDLE_LEFT);
+        auctionLabel.setSizeUndefined();
+        topFrame.setSpacing(true);
+        HorizontalLayout userInfoPanel = new HorizontalLayout();
+        topFrame.addComponent(userInfoPanel);
+        topFrame.setComponentAlignment(userInfoPanel, Alignment.TOP_RIGHT);
+        Label userNameLabel = new Label("User: " + userName);
+        userInfoPanel.addComponent(userNameLabel);
+
+        //userInfoPanel.setComponentAlignment(userNameLabel, Alignment.TOP_RIGHT);
+        Button logoutButton = new Button("Logout",new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                onLogout();
+            }
+        });
+        logoutButton.setStyleName(BaseTheme.BUTTON_LINK);
+
+        userInfoPanel.addComponent(logoutButton);
+        userInfoPanel.setSpacing(true);
+
+        //topFrame.setComponentAlignment(logoutButton, Alignment.TOP_RIGHT);
+
+
+        //main space
         HorizontalLayout middleFrame = new HorizontalLayout();
         mainFrame.addComponent(topFrame);
         mainFrame.addComponent(middleFrame);
-        lotsPanel = new FormLayout();
+        lotsPanel = new HorizontalLayout();
         lotsPanel.setWidth(40, Unit.PERCENTAGE);
         lotsPanel.setCaption("Lots");
         //lotsPanel.setStyleName();
-        VerticalLayout rightFrame = new VerticalLayout();
+//lots
+        lotsTable = new Table("The Brightest Stars");
+        fillLotsTable();
+        lotsPanel.addComponent(lotsTable);
+        Button btnAddNewLot = new Button("New lot", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                onAddNewLot();
+            }
+        });
+        lotsPanel.addComponent(btnAddNewLot);
+        lotsPanel.setComponentAlignment(btnAddNewLot,Alignment.BOTTOM_RIGHT);
+
         middleFrame.addComponent(lotsPanel);
+        VerticalLayout rightFrame = new VerticalLayout();
         middleFrame.addComponent(rightFrame);
         HorizontalLayout lotInfoFrame = new HorizontalLayout();
         lotInfoFrame.setHeight(50, Unit.PERCENTAGE);
@@ -58,102 +108,32 @@ class MainWindow extends Window implements BasicWindow{
         bidsPanel.setCaption("Bids");
         rightFrame.addComponent(lotInfoFrame);
         rightFrame.addComponent(bidsPanel);
-        //components
-        //top
-        Label auctionLabel = new Label("Auction");
-        topFrame.addComponent(auctionLabel);
-        topFrame.setComponentAlignment(auctionLabel, Alignment.MIDDLE_LEFT);
-        Label userNameLabel = new Label("User: " + userName);
-        topFrame.addComponent(userNameLabel);
-        topFrame.setComponentAlignment(userNameLabel, Alignment.MIDDLE_RIGHT);
-        Button logoutButton = new Button("Logout",new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                onLogout();
-            }
-        });
-        logoutButton.setStyleName(BaseTheme.BUTTON_LINK);
-        topFrame.addComponent(logoutButton);
-        topFrame.setComponentAlignment(logoutButton, Alignment.MIDDLE_RIGHT);
-        //lots
 
 
+    }
 
+    private void onAddNewLot() {
+        NewLotWindow wnd = new NewLotWindow(this, userId);
+        this.parentWindow.getCurrent().addWindow(wnd);
+    }
 
+    private void fillLotsTable() {
+        lotsTable.removeAllItems();//clear before filling
+        // column captions
+        lotsTable.addContainerProperty("Code", Integer.class, null);
+        lotsTable.addContainerProperty("Name", String.class, null);
+        lotsTable.addContainerProperty("Finish date", Date.class, null);
+        lotsTable.addContainerProperty("State", String.class, null);
+        //get lots
+        List<Lot> lots = auction.getAllLotsForUser(userId);
+        //records
+        int i = 0;
+        for (Lot lot : lots) {
+            lotsTable.addItem(
+                    new Object[]{lot.getId(), lot.getName(), lot.getFinishDate(),lot.getState()}, i++);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /////fields////
-        //login
-//        Layout fieldsPanel = new FormLayout();
-//        loginField = new TextField("Login");
-//        loginField.addValidator(new StringLengthValidator(
-//                "The name must be 3-10 letters (was {0})", 3, 10, true));//validation
-//        loginField.setImmediate(true);
-//        loginField.setWidth("100%");
-//        fieldsPanel.addComponent(loginField);
-//        //pwd
-//        passwordField = new PasswordField("Password");
-//        passwordField.addValidator(new StringLengthValidator(
-//                "The password must be at least 4 letters (was {0})", 4, -1, true));//validation
-//        passwordField.setImmediate(true);
-//        passwordField.setWidth("100%");
-//        fieldsPanel.addComponent(passwordField);
-//        //1st name
-//        firstNameField = new TextField("First name");
-//        firstNameField.addValidator(new StringLengthValidator(
-//                "The First name must be not null (was {0})", 1, -1, true));//validation
-//        firstNameField.setImmediate(true);
-//        firstNameField.setWidth("100%");
-//        fieldsPanel.addComponent(firstNameField);
-//        //2nd name
-//        lastNameField = new TextField("Last name");
-//        lastNameField.setWidth("100%");
-//        fieldsPanel.addComponent(lastNameField);
-//
-//        ////buttons////
-//        //ok
-//        HorizontalLayout buttonsPanel = new HorizontalLayout();
-//        buttonsPanel.setMargin(true);
-//        buttonsPanel.setWidth("100%");
-//        btnOk = new Button("Register");
-//        Button.ClickListener okOnClick = new Button.ClickListener() {
-//            @Override
-//            public void buttonClick(Button.ClickEvent clickEvent) {
-//                onOk();
-//            }
-//        };
-//        btnOk.addClickListener(okOnClick);
-//        buttonsPanel.addComponent(btnOk);
-//        buttonsPanel.setComponentAlignment(btnOk, Alignment.MIDDLE_LEFT);
-//        //cancel
-//        btnCancel = new Button("Cancel",new Button.ClickListener() {
-//            @Override
-//            public void buttonClick(Button.ClickEvent clickEvent) {
-//                onCancel();
-//            }
-//        });
-//        buttonsPanel.addComponent(btnCancel);
-//        buttonsPanel.setComponentAlignment(btnCancel, Alignment.MIDDLE_RIGHT);
-//        //total
-//        content.addComponent(fieldsPanel);
-//        content.addComponent(buttonsPanel);
+        }
+        lotsTable.setPageLength(lotsTable.size());
     }
 
     private void onLogout() {
@@ -205,12 +185,10 @@ class MainWindow extends Window implements BasicWindow{
     }
 
     @Override
-    public void onNotify() {
-        if (resultType == "Success") {
-            //onMain();//todo main window
-            //onRegister();
-            this.close();//??
+    public void onNotify(String message) {
+        if (message == Consts.REFRESH_LOTS_MESSAGE) {
+            fillLotsTable();
         }
-        resultType = "";
+
     }
 }

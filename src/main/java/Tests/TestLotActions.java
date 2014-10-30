@@ -30,8 +30,8 @@ public class TestLotActions {
         //auth
         log.info("Authenticate user");
         try {
-            userId = auction.AuthenticateUser("Nik","qwerty");
-            auction.AuthenticateUser("Nik","qwerty1");
+            userId = auction.authenticateUser("Nik", "qwerty");
+            auction.authenticateUser("Nik", "qwerty1");
 
         } catch (UserDataNotValidException e) {
             log.error("catch ex:", e);
@@ -47,7 +47,7 @@ public class TestLotActions {
         }
 
         //change lot state
-        List<Lot> lotList = new ArrayList<Lot>(auction.GetAllLotsForUser(userId));
+        List<Lot> lotList = new ArrayList<Lot>(auction.getAllLotsForUser(userId));
         for(Lot lot:lotList){
             log.info("print lot info: " + lot.toString());
         }
