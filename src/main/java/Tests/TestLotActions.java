@@ -21,8 +21,8 @@ public class TestLotActions {
         //user
         log.info("create new user");
         try {
-            userId = auction.CreateNewUser("Nika","qwerty","Nikolya","");
-            userId = auction.CreateNewUser("Nik","qwerty","Nikolya","");
+            userId = auction.createNewUser("Nika","qwerty","Nikolya","");
+            userId = auction.createNewUser("Nik","qwerty","Nikolya","");
             //log.info("user Nik is created");
         } catch (LoginIsAlreadyExistsException e) {
             log.error("catch ex:", e);
