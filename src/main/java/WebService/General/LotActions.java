@@ -1,6 +1,7 @@
 package WebService.General;
 
 import Library.Consts;
+import Library.Exceptions.LotUpdateException;
 import WebService.Domain.Lot;
 import WebService.db.LotDAO;
 import org.apache.log4j.Logger;
@@ -19,34 +20,44 @@ public class LotActions {
 
 
     //methods
-    public boolean AddNewLot(String name, Date finishDate, double startPrice, String description, int ownerId){
+    public boolean addNewLot(String name, Date finishDate, double startPrice, String description, int ownerId){
         lot = new Lot(name,  finishDate,  startPrice,  description,  ownerId);
         return lotDAO.addLot(lot);
     }
 
-    public boolean UpdateLotState(int lotId, int userId, String newState){
+    public void updateLotState(int lotId, int userId, String newState) throws LotUpdateException {
         lot = lotDAO.getLotById(lotId);
        //check can user cancel
         int lotOwnerId = lot.getOwnerId();
+        String message = "";
         if (lotOwnerId != userId){
-            log.warn("Can't change state on " + newState + " for lot " + lot.getName() +
-                    ", because current user is not its owner");
-            return false;
+            message = "Can't change state to " + newState + " for lot " + lot.getName() +
+                    ", because current user is not its owner";
+            log.warn(message);
+            //return false;
+            throw new LotUpdateException(message);
         }
         String currentState = lot.getState();
         //check can change state
-       if (currentState != Consts.ACTIVE_LOT_STATE) {
-           log.warn("Can't change state from " + currentState +
-                   " on " + newState + " for lot " + lot.getName() +
-                    " (owner: " + lot.getOwnerName() + ")");
-           return false;
+       if ( !Consts.ACTIVE_LOT_STATE.equals(currentState)) {
+           message = "Can't change state from " + currentState +
+                   " to " + newState + " for lot " + lot.getName() +
+                   " (owner: " + lot.getOwnerName() + ")";
+           log.warn(message);
+           throw new LotUpdateException(message);
         }
         //update state in db
         lot.setState(newState);
-        return lotDAO.updateLotState(lot);
+        if (!lotDAO.updateLotState(lot)){
+            throw new LotUpdateException("sql ex");
+        };
     }
 
-    public List<Lot> GetAllLotsForUser(int userId) {
+    public List<Lot> getAllLotsForUser(int userId) {
         return lotDAO.getAllLotsForOwner(userId);
+    }
+
+    public Lot getLotById(int lotId) {
+        return lotDAO.getLotById(lotId);
     }
 }

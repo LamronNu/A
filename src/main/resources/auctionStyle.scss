@@ -1,0 +1,50 @@
+@import "../reindeer/reindeer.scss";
+
+@mixin auctionStyle {
+  @include reindeer;
+
+//  /* White background for the entire UI */
+//  .v-ui {
+//    background: white;
+//  }
+//
+//  /* All labels have white text on black background */
+//  .v-label {
+//    background: black;
+//    color: white;
+//    font-size: 24pt;
+//    line-height: 24pt;
+//    padding: 5px;
+//  }
+//
+//  /* All buttons have blue caption and some margin */
+//  .v-button {
+//    margin: 10px;
+//
+//    /* A nested selector to increase specificity */
+//    .v-button-caption {
+//      color: blue;
+//    }
+//  }
+//  table.another {
+//    color: blue;
+////    background: yellow;
+//  }
+//  table.normal {
+//    color: black;
+//    //    background: yellow;
+//  }
+//  td.normal  {color: black;}
+//  td.another {color: blue;}
+//  .v-table {}
+//  .v-table-header-wrap {}
+//  .v-table-header {}
+//  .v-table-header-cell {}
+//  .v-table-resizer {} /* Column resizer handle. */
+//  .v-table-caption-container {}
+//  .v-table-body {}
+//  .v-table-row-spacer {}
+//  .v-table-table {}
+  .v-table-row {color: blue}
+//  .v-table-cell-content {}
+}

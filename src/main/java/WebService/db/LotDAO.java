@@ -79,7 +79,7 @@ public class LotDAO {
         try {
             PreparedStatement preparedStatement = connection
                     .prepareStatement("update lots set state=? where Id=?");
-            preparedStatement.setString(1, lot.getName());
+            preparedStatement.setString(1, lot.getState());
             preparedStatement.setInt(2, lot.getId());
             preparedStatement.executeUpdate();
             result = true;
@@ -115,9 +115,12 @@ public class LotDAO {
     public List<Lot> getAllLotsForOwner(int ownerId) {
         List<Lot> lots = new ArrayList<Lot>();
         try {
+            String sqlQuery = "select * from lots " + (ownerId == -1 ? "" : "where ownerId=?");
             PreparedStatement preparedStatement = connection.
-                    prepareStatement("select * from lots where ownerId=?");
-            preparedStatement.setInt(1, ownerId);
+                    prepareStatement(sqlQuery);
+            if (ownerId != -1) {
+                preparedStatement.setInt(1, ownerId);
+            }
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
