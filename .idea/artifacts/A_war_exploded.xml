@@ -6,6 +6,7 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="A" />
+          <element id="library" level="application" name="sass-stdlib" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Vaadin Server" />
@@ -15,6 +16,7 @@
           <element id="library" level="project" name="joda-time-2.4" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="A/web/log4j" />
     </root>
   </artifact>
 </component>

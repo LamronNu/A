@@ -29,6 +29,12 @@ public class Bid {
     private int ownerId;
     @Column(name = "createdOn")
     private Date createdOn = new Date();
+
+    //calculated by joins
+    private int lotOwnerId;
+    private double lotStartPrice;
+    private String ownerName;
+    private double lotMaxBidValue;
     //constructors
 
     public Bid(double value, int lotId, int ownerId) {
@@ -86,6 +92,35 @@ public class Bid {
 
     public String getBidderName() {
         return owner.getFullName();
+    }
+
+    public void setLotOwnerId(int lotOwnerId) {
+        this.lotOwnerId = lotOwnerId;
+    }
+
+    public void setLotStartPrice(double lotStartPrice) {
+        this.lotStartPrice = lotStartPrice;
+    }
+
+    public void setOwnerName(String ownerFirstName, String ownerLastName) {
+        this.ownerName = ownerFirstName + " "
+                + (ownerLastName == null ? "" : ownerLastName);
+    }
+
+    public void setLotMaxBidValue(double lotMaxBidValue) {
+        this.lotMaxBidValue = lotMaxBidValue;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public double getLotStartPrice() {
+        return lotStartPrice;
+    }
+
+    public double getLotMaxBidValue() {
+        return lotMaxBidValue;
     }
 
     //

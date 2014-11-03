@@ -1,8 +1,10 @@
 @import "../reindeer/reindeer.scss";
-
-@mixin auctionStyle {
+@import "../../../../../../../../../dev/vaadin-all-7.3.2/css/styles.css";
+@mixin auction {
   @include reindeer;
-
+  .v-button {
+    color: blue;
+  }
 //  /* White background for the entire UI */
 //  .v-ui {
 //    background: white;

@@ -15,7 +15,7 @@
         <configuration ws.engine="Glassfish / JAX-WS 2.2 RI / Metro 1.X / JWSDP 2.2" />
       </facet>
     </facet>
-    <facet type="web" name="Web2">
+    <facet type="web" name="log4j">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/src/main/resources/log4j.properties" />
@@ -62,6 +62,7 @@
     <orderEntry type="library" name="mysql-connector-java-5.0" level="project" />
     <orderEntry type="library" name="apache-log4j-1.2" level="project" />
     <orderEntry type="library" name="joda-time-2.4" level="project" />
+    <orderEntry type="library" name="sass-stdlib" level="application" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.plugins:maven-resources-plugin:2.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-api:2.0.6" level="project" />
@@ -99,7 +100,7 @@
     <orderEntry type="library" name="Maven: org.apache.maven.shared:maven-filtering:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-interpolation:1.13" level="project" />
     <orderEntry type="library" name="Maven: org.sonatype.plexus:plexus-build-api:0.0.4" level="project" />
-    <orderEntry type="library" name="sass-stdlib" level="application" />
+    <orderEntry type="library" name="Maven: com.vaadin:vaadin-themes:7.3.2" level="project" />
   </component>
 </module>
 

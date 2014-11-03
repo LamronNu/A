@@ -16,8 +16,8 @@ public class BidActions {
 
     public List<Bid> getAllBidsForLot(int lotId) {
 
-
-        return bidDAO.getAllBidsForLot(lotId);
+        List<Bid> result = bidDAO.getAllBidsForLot(lotId);
+        return result;
     }
 
     public boolean createNewBid(Double bidValue, int ownerId, int lotId) {
