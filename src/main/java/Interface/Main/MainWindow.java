@@ -25,13 +25,14 @@ import java.util.List;
 public class MainWindow extends Window implements BasicWindow {
 
     private static final Logger log = Logger.getLogger(MainWindow.class);
-    private final String spacesString = "&nbsp;&nbsp;&nbsp;&nbsp;";
+    private final String SPACES_STRING = "&nbsp;&nbsp;&nbsp;&nbsp;";
     private final AuctionWs auction;
     private final String userName;
     private final Table lotsTable = new Table();
     private final Button btnAddNewBid;
     private final Button btnCancelTrades;
-    private HorizontalLayout lotDetailsPanel;
+    //private final float cancelTradesButtonSize;
+    private HorizontalLayout lotDetailsLayout;
     private VerticalLayout bidsFrame;
     private VerticalLayout lotsFrame;
 
@@ -46,6 +47,7 @@ public class MainWindow extends Window implements BasicWindow {
     private List<Bid> bids;
     private VerticalLayout lotDetailsValuesPanel;
     private SimpleDateFormat dateFormat;
+    //private float remainingTimeLabelSize;
 
     public MainWindow(UI components, int userId) {
         super("Auction"); // Set window caption
@@ -58,50 +60,36 @@ public class MainWindow extends Window implements BasicWindow {
         userName = auction.getUserName(userId);
         dateFormat = new SimpleDateFormat(Consts.DATE_FORMAT);
         // Create form
-        FormLayout content = new FormLayout();
+        VerticalLayout content = new VerticalLayout();
         content.setMargin(true);
         //content.setSizeFull();
         content.setSizeUndefined();
 //        content.setWidth(100, Unit.PERCENTAGE);
         setContent(content);
-        content.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        //content.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
             // form layouts
-            VerticalLayout mainFrame = new VerticalLayout();
-            mainFrame.setSizeFull();
-            mainFrame.setWidth(100, Unit.PERCENTAGE);//.setSizeUndefined();
-                //------TOP INFO----
-                HorizontalLayout topFrame = new HorizontalLayout();
-                topFrame.setHeight(50, Unit.PIXELS);
-                topFrame.setSizeFull();//Width(100, Unit.PERCENTAGE);
-                    Label auctionLabel = new Label("<H1>Auction</H1>", ContentMode.HTML);
-                    auctionLabel.setWidth(100, Unit.PERCENTAGE);//SizeFull();//Undefined();
-                topFrame.addComponent(auctionLabel);
-                topFrame.setComponentAlignment(auctionLabel, Alignment.MIDDLE_LEFT);
-                //topFrame.setSpacing(true);
-                    HorizontalLayout userInfoPanel = new HorizontalLayout();
-                        Label userNameLabel = new Label("User: " + userName);
-                    userInfoPanel.addComponent(userNameLabel);
-                        Button logoutButton = new Button("Logout",new Button.ClickListener() {
-                            @Override
-                            public void buttonClick(Button.ClickEvent clickEvent) {
-                                onLogout();
-                            }
-                        });
-                        logoutButton.setStyleName(BaseTheme.BUTTON_LINK);
-                    userInfoPanel.addComponent(logoutButton);
-                    userInfoPanel.setSpacing(true);
-                    userInfoPanel.setHeight(100, Unit.PERCENTAGE);
-                    userInfoPanel.setWidth(200, Unit.POINTS);
-                topFrame.addComponent(userInfoPanel);
-                topFrame.setComponentAlignment(userInfoPanel, Alignment.TOP_RIGHT);
-                mainFrame.addComponent(topFrame);
-                //mainFrame.setComponentAlignment(topFrame, Alignment.TOP_CENTER);
-                //---MAIN SPACE-----
-                HorizontalLayout middleFrame = new HorizontalLayout();
-                middleFrame.setHeight(100, Unit.PERCENTAGE);
-                middleFrame.setWidth(100, Unit.PERCENTAGE);
-        //        middleFrame.setSizeFull();
-                //middleFrame.setMargin(true);
+            HorizontalLayout mainFrame = new HorizontalLayout();
+            //mainFrame.setSizeFull();
+            //mainFrame.setHeight(100, Unit.PERCENTAGE);
+            //mainFrame.setWidth(100, Unit.PERCENTAGE);//.setSizeUndefined();
+                //--------LEFT FRAME---
+                FormLayout leftFrame = new FormLayout();
+                leftFrame.setHeight(100, Unit.PERCENTAGE);
+                leftFrame.setWidth(40, Unit.PERCENTAGE);
+                    //------TOP INFO----
+                    HorizontalLayout auctionFrame = new HorizontalLayout();
+                    auctionFrame.setHeight(50, Unit.PIXELS);
+                    auctionFrame.setWidth(100, Unit.PERCENTAGE);
+
+                        Label auctionLabel = new Label("<H1>Auction</H1>" + SPACES_STRING, ContentMode.HTML);
+                        auctionLabel.setWidth(100, Unit.PERCENTAGE);//SizeFull();//Undefined();
+                    auctionFrame.addComponent(auctionLabel);
+                    auctionFrame.setComponentAlignment(auctionLabel, Alignment.MIDDLE_LEFT);
+                    //leftFrame.setSpacing(true);
+                leftFrame.addComponent(auctionFrame);
+
+
+                //--LOTS
                     lotsFrame = new VerticalLayout();
                     lotsFrame.setHeight(100, Unit.PERCENTAGE);
                     lotsFrame.setWidth(40, Unit.PERCENTAGE);
@@ -122,101 +110,112 @@ public class MainWindow extends Window implements BasicWindow {
                         });
                     lotsFrame.addComponent(btnAddNewLot);
                     lotsFrame.setComponentAlignment(btnAddNewLot, Alignment.BOTTOM_RIGHT);
-                //left panel
-                Panel lotsPanel = new Panel();
-                lotsPanel.setCaption("Lots");
-                lotsPanel.setContent(lotsFrame);
-                middleFrame.addComponent(lotsPanel);
+                    //left panel
+                    Panel lotsPanel = new Panel();
+                    lotsPanel.setCaption("Lots");
+                    lotsPanel.setContent(lotsFrame);
 
-                    /////----LOT INFO (DETAILS)---
-                    VerticalLayout rightFrame = new VerticalLayout();
-                    rightFrame.setHeight(100, Unit.PERCENTAGE);
-                    rightFrame.setWidth(60, Unit.PERCENTAGE);
-                        HorizontalLayout lotInfoFrame = new HorizontalLayout();
-                        //lotInfoFrame.setHeight(50, Unit.PERCENTAGE);
-                        //lotInfoFrame.setSizeFull();
-                        lotInfoFrame.setHeight(50, Unit.PERCENTAGE);
-                        lotInfoFrame.setWidth(100, Unit.PERCENTAGE);
-                        lotInfoFrame.setCaption("Lot details");
-                        lotInfoFrame.setMargin(true);
-                        //lot details
-                        lotDetailsPanel = new HorizontalLayout();
-                            initLotDetails();
-                            fillLotDetails();
-                        lotInfoFrame.addComponent(lotDetailsPanel);
-                        lotInfoFrame.setComponentAlignment(lotDetailsPanel, Alignment.BOTTOM_LEFT);
-                        //lot buttons
-                        VerticalLayout lotButtonsFrame = new VerticalLayout();
-                        lotButtonsFrame.setHeight(100, Unit.PERCENTAGE);
-                        lotButtonsFrame.setWidth(150, Unit.POINTS);
-                            ///temp
-//                            String[] themes = { "valo", "reindeer", "runo", "chameleon" };
-//                            ComboBox themePicker = new ComboBox("Theme", Arrays.asList(themes));
-//                            themePicker.setValue(parentWindow.getTheme());
-//themePicker.setWidthUndefined();
-//                            themePicker.addValueChangeListener(new Property.ValueChangeListener() {
-//                                @Override
-//                                public void valueChange(Property.ValueChangeEvent event) {
-//                                    String theme = (String) event.getProperty().getValue();
-//                                    parentWindow.setTheme(theme);
-//                                }
-//                            });
-//                            lotButtonsFrame.addComponent(themePicker);
-                            ///
-                            btnCancelTrades = new Button("Cancel trades",new Button.ClickListener() {
-                                @Override
-                                public void buttonClick(Button.ClickEvent clickEvent) {
-                                    onCancelTrades();
-                                }
-                            });
-                            lotButtonsFrame.addComponent(btnCancelTrades);
-                            Button btnFinishTrades = new Button("Finish trades",new Button.ClickListener() {
-                                @Override
-                                public void buttonClick(Button.ClickEvent clickEvent) {
-                                    onFinishTrades();
-                                }
-                            });
-                        lotButtonsFrame.addComponent(btnFinishTrades);
-                        lotInfoFrame.addComponent(lotButtonsFrame);
-                        lotInfoFrame.setComponentAlignment(lotButtonsFrame, Alignment.BOTTOM_RIGHT);
-                        //lot details panel
-                        Panel lotDetailssPanel = new Panel();
-                        lotDetailssPanel.setCaption("Lot details");
-                        lotDetailssPanel.setContent(lotInfoFrame);
-        lotDetailssPanel.setWidthUndefined();
-                    rightFrame.addComponent(lotDetailssPanel);
+                leftFrame.addComponent(lotsPanel);
+                leftFrame.setComponentAlignment(lotsPanel,Alignment.BOTTOM_RIGHT);
 
-                        //--BIDS INFO-----
-                        bidsFrame = new VerticalLayout();
-                        bidsFrame.setHeight(50, Unit.PERCENTAGE);
-                        bidsFrame.setWidth(100, Unit.PERCENTAGE);
-                        bidsFrame.setMargin(true);//new MarginInfo(true, false, false, false));
-                        bidsFrame.setCaption("Bids");
-                            initBidsTable();
-                            fillBidsTable();
-                        bidsFrame.addComponent(bidsTable);
-                        bidsFrame.setComponentAlignment(bidsTable, Alignment.TOP_CENTER);
-                            //bid button
-                            btnAddNewBid = new Button("New bid", new Button.ClickListener() {
-                                @Override
-                                public void buttonClick(Button.ClickEvent clickEvent) {
-                                    onAddNewBid();
-                                }
-                            });
-        //btnAddNewBid.setStyleName("blue");
-                        updateButtonEnabled();
-                        bidsFrame.addComponent(btnAddNewBid);
-                        bidsFrame.setComponentAlignment(btnAddNewBid, Alignment.BOTTOM_RIGHT);
-                        //bids panel
-                        Panel bidsPanel = new Panel();
-                        bidsPanel.setCaption("Bids");
-                        bidsPanel.setContent(bidsFrame);
-        bidsPanel.setWidthUndefined();
-                    rightFrame.addComponent(bidsPanel);
-                    rightFrame.setMargin(new MarginInfo(false,false,false,true));
-                middleFrame.addComponent(rightFrame);
+            mainFrame.addComponent(leftFrame);
 
-            mainFrame.addComponent(middleFrame);
+                    ///// ----RIGHT FRAME-----
+                FormLayout rightFrame = new FormLayout();
+                rightFrame.setHeight(100, Unit.PERCENTAGE);
+                //rightFrame.setWidthUndefined();//(60, Unit.PERCENTAGE);
+
+                    //about user
+                    HorizontalLayout userInfoLayout = new HorizontalLayout();
+                    userInfoLayout.setHeight(50, Unit.PIXELS);
+                    userInfoLayout.setWidthUndefined();//(100, Unit.PERCENTAGE);
+                        Label userNameLabel = new Label("<b>User: </b>" + userName + SPACES_STRING, ContentMode.HTML);
+                    userInfoLayout.addComponent(userNameLabel);
+                    userInfoLayout.setComponentAlignment(userNameLabel, Alignment.TOP_LEFT);
+                        Button logoutButton = new Button("Logout",new Button.ClickListener() {
+                            @Override
+                            public void buttonClick(Button.ClickEvent clickEvent) {
+                                onLogout();
+                            }
+                        });
+                        logoutButton.setStyleName(BaseTheme.BUTTON_LINK);
+                    userInfoLayout.addComponent(logoutButton);
+                    userInfoLayout.setComponentAlignment(logoutButton, Alignment.TOP_RIGHT);
+                    userInfoLayout.setSpacing(true);
+
+                rightFrame.addComponent(userInfoLayout);
+                rightFrame.setComponentAlignment(userInfoLayout, Alignment.TOP_RIGHT);
+
+                    //----LOT INFO (DETAILS)---
+                    HorizontalLayout lotInfoFrame = new HorizontalLayout();
+                    //lotInfoFrame.setHeight(50, Unit.PERCENTAGE);
+                    //lotInfoFrame.setWidth(100, Unit.PERCENTAGE);
+                    //lotInfoFrame.setCaption("Lot details");
+                    lotInfoFrame.setMargin(true);
+                    //lot details
+                    lotDetailsLayout = new HorizontalLayout();
+                    lotDetailsLayout.setHeight(100, Unit.PERCENTAGE);
+                    //lotDetailsLayout.setWidth(150, Unit.POINTS);
+                        initLotDetails();
+                        fillLotDetails();
+                    lotInfoFrame.addComponent(lotDetailsLayout);
+                    lotInfoFrame.setComponentAlignment(lotDetailsLayout, Alignment.BOTTOM_LEFT);
+                    //lot buttons
+                    VerticalLayout lotButtonsFrame = new VerticalLayout();
+                    lotButtonsFrame.setHeight(100, Unit.PERCENTAGE);
+                    //lotButtonsFrame.setWidth(150, Unit.POINTS);
+
+                        btnCancelTrades = new Button("Cancel trades",new Button.ClickListener() {
+                            @Override
+                            public void buttonClick(Button.ClickEvent clickEvent) {
+                                onCancelTrades();
+                            }
+                        });
+                        //cancelTradesButtonSize = btnCancelTrades.getWidth();
+                        lotButtonsFrame.addComponent(btnCancelTrades);
+
+                    lotInfoFrame.addComponent(lotButtonsFrame);
+                    lotInfoFrame.setComponentAlignment(lotButtonsFrame, Alignment.BOTTOM_RIGHT);
+
+                    //lot details panel
+                    Panel lotDetailsPanel = new Panel();
+                    lotDetailsPanel.setCaption("Lot details");
+                    lotDetailsPanel.setContent(lotInfoFrame);
+                    lotDetailsPanel.setWidth(100, Unit.PERCENTAGE);//Undefined();
+                rightFrame.addComponent(lotDetailsPanel);
+
+                    //--BIDS INFO-----
+                    bidsFrame = new VerticalLayout();
+                    //bidsFrame.setHeight(50, Unit.PERCENTAGE);
+                    bidsFrame.setWidth(100, Unit.PERCENTAGE);
+                    bidsFrame.setMargin(new MarginInfo(true, true, false, true));
+                    //bidsFrame.setCaption("Bids");
+                        initBidsTable();
+                        fillBidsTable();
+                    bidsFrame.addComponent(bidsTable);
+                    bidsFrame.setComponentAlignment(bidsTable, Alignment.TOP_CENTER);
+                        //bid button
+                        btnAddNewBid = new Button("New bid", new Button.ClickListener() {
+                            @Override
+                            public void buttonClick(Button.ClickEvent clickEvent) {
+                                onAddNewBid();
+                            }
+                        });
+                    updateButtonEnabled();
+                    bidsFrame.addComponent(btnAddNewBid);
+                    bidsFrame.setComponentAlignment(btnAddNewBid, Alignment.BOTTOM_RIGHT);
+                    //size of lot values -- calc and set
+                    //lotDetailsValuesPanel.setWidth(bidsFrame.getWidth() - remainingTimeLabelSize - cancelTradesButtonSize, Unit.POINTS);
+                    //bids panel
+                    Panel bidsPanel = new Panel();
+                    bidsPanel.setCaption("Bids");
+                    bidsPanel.setContent(bidsFrame);
+                    bidsPanel.setWidth(100, Unit.PERCENTAGE);//Undefined();
+                rightFrame.addComponent(bidsPanel);
+                //rightFrame.setMargin(new MarginInfo(false,false,false,true));
+            //auctionFrame.addComponent(rightFrame);
+
+            mainFrame.addComponent(rightFrame);
 
         content.addComponent(mainFrame);
 
@@ -224,28 +223,22 @@ public class MainWindow extends Window implements BasicWindow {
 
     private void initBidsTable() {
         log.info("init bids table");
-        //IsTableLock = true;
-        //bidsTable.removeAllItems();//clear before filling
 
         // column captions
         bidsTable.addContainerProperty("Bid", Double.class, null);
         bidsTable.addContainerProperty("Date", Date.class, null);
         bidsTable.addContainerProperty("Bidder", String.class, null);
         //temp
-        bidsTable.addContainerProperty("lotStartPrice", Double.class, null);
-        bidsTable.addContainerProperty("lotMaxBidValue", Double.class, null);
+        //bidsTable.addContainerProperty("lotStartPrice", Double.class, null);
+        //bidsTable.addContainerProperty("lotMaxBidValue", Double.class, null);
         // Allow the user to collapse and uncollapse columns
-        bidsTable.setColumnCollapsingAllowed(true);
+//        bidsTable.setColumnCollapsingAllowed(true);
 //        bidsTable.setColumnCollapsed("lotStartPrice", true);
 //        bidsTable.setColumnCollapsed("lotMaxBidValue", true);
 
 
-        bidsTable.setPageLength(7);
-        //footer
-//        bidsTable.setFooterVisible(true);
-//        // Add some total sum and description to footer
-//        bidsTable.setColumnFooter("Finish date", "Total count");
-//        bidsTable.setColumnFooter("State", Integer.toString(i));
+        bidsTable.setPageLength(6);
+        bidsTable.setWidth(100, Unit.PERCENTAGE);//Undefined();
     }
 
     private void fillBidsTable() {
@@ -261,7 +254,8 @@ public class MainWindow extends Window implements BasicWindow {
             for (Bid bid : bids) {
                 bidsTable.addItem(
                         new Object[]{bid.getValue(), bid.getCreatedOnDate(), bid.getOwnerName()
-                                , bid.getLotStartPrice(), bid.getLotMaxBidValue()}, i++);
+                                //, bid.getLotStartPrice(), bid.getLotMaxBidValue()
+                        }, i++);
                 // lotsTable.setStyleName(lot.getOwnerId() == userId ? "another" : "normal");
 
             }
@@ -301,7 +295,7 @@ public class MainWindow extends Window implements BasicWindow {
             description = "----";//???todo description
         }
         valueLabel = new Label((IsSelectedLot ? description : Consts.EMPTY_STR)
-                                + spacesString, ContentMode.HTML);
+                                + SPACES_STRING, ContentMode.HTML);
         lotDetailsValuesPanel.addComponent(valueLabel);
 //start price
         valueLabel = new Label(IsSelectedLot ? (Double.toString(currentLot.getStartPrice()) + " $" ): Consts.EMPTY_STR);
@@ -310,65 +304,64 @@ public class MainWindow extends Window implements BasicWindow {
 
     private void initLotDetails() { //on prepare
 
-        //lotDetailsPanel.removeAllComponents();//remove current info
-        lotDetailsPanel.setMargin(new MarginInfo(false,true,false,false));
+        //lotDetailsLayout.removeAllComponents();//remove current info
+        lotDetailsLayout.setMargin(new MarginInfo(false, true, false, false));
         //generate labels
         //
         VerticalLayout captionsPanel = new VerticalLayout();
         captionsPanel.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
-        captionsPanel.setSizeFull();
+        captionsPanel.setWidth(25, Unit.PERCENTAGE);//SizeUndefined();//Full();
+        captionsPanel.setHeight(100,Unit.PERCENTAGE);
         lotDetailsValuesPanel = new VerticalLayout();
         lotDetailsValuesPanel.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
-        lotDetailsValuesPanel.setSizeFull();
+        lotDetailsValuesPanel.setWidth(75, Unit.PERCENTAGE);//.setSizeFull();
+        lotDetailsValuesPanel.setHeight(100,Unit.PERCENTAGE);
 
 //code
-        Label captionLabel = new Label("Code:" + spacesString, ContentMode.HTML);
+        Label captionLabel = new Label("Code:" + SPACES_STRING, ContentMode.HTML);
         Label valueLabel = new Label();//Integer.toString(currentLot.getId()));
         captionsPanel.addComponent(captionLabel);
         lotDetailsValuesPanel.addComponent(valueLabel);
 //name
-        captionLabel = new Label("Name:" + spacesString, ContentMode.HTML);
+        captionLabel = new Label("Name:" + SPACES_STRING, ContentMode.HTML);
         valueLabel = new Label();//currentLot.getName());
         captionsPanel.addComponent(captionLabel);
         lotDetailsValuesPanel.addComponent(valueLabel);
 //state
-        captionLabel = new Label("State:" + spacesString, ContentMode.HTML);
+        captionLabel = new Label("State:" + SPACES_STRING, ContentMode.HTML);
         valueLabel = new Label();//currentLot.getState());
         captionsPanel.addComponent(captionLabel);
         lotDetailsValuesPanel.addComponent(valueLabel);
 //finish date
-        captionLabel = new Label("Finish date:" + spacesString, ContentMode.HTML);
+        captionLabel = new Label("Finish date:" + SPACES_STRING, ContentMode.HTML);
         //DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         valueLabel = new Label();//df.format(currentLot.getFinishDate()));
         captionsPanel.addComponent(captionLabel);
         lotDetailsValuesPanel.addComponent(valueLabel);
 //owner
-        captionLabel = new Label("Owner:" + spacesString, ContentMode.HTML);
+        captionLabel = new Label("Owner:" + SPACES_STRING, ContentMode.HTML);
         valueLabel = new Label();//currentLot.getOwnerName());
         captionsPanel.addComponent(captionLabel);
         lotDetailsValuesPanel.addComponent(valueLabel);
 //remaining time
-        captionLabel = new Label("Remaining time:" + spacesString, ContentMode.HTML);
+        captionLabel = new Label("Remaining time:" + SPACES_STRING, ContentMode.HTML);
+        //remainingTimeLabelSize = captionLabel.getWidth();
         valueLabel = new Label();//currentLot.getRemainingTime());
         captionsPanel.addComponent(captionLabel);
         lotDetailsValuesPanel.addComponent(valueLabel);
 //description
-        captionLabel = new Label("Description:" + spacesString, ContentMode.HTML);
-//        String description = currentLot.getDescription();
-//        if (description == "" || description == null){
-//            description = "----";//???
-//        }
-        valueLabel = new Label();//description+ spacesString, ContentMode.HTML);
+        captionLabel = new Label("Description:" + SPACES_STRING, ContentMode.HTML);
+        valueLabel = new Label();//description+ SPACES_STRING, ContentMode.HTML);
         captionsPanel.addComponent(captionLabel);
         lotDetailsValuesPanel.addComponent(valueLabel);
 //start price
-        captionLabel = new Label("Start price:" + spacesString, ContentMode.HTML);
+        captionLabel = new Label("Start price:" + SPACES_STRING, ContentMode.HTML);
         valueLabel = new Label();//Double.toString(currentLot.getStartPrice()) + " $");
         captionsPanel.addComponent(captionLabel);
         lotDetailsValuesPanel.addComponent(valueLabel);
 
-        lotDetailsPanel.addComponent(captionsPanel);
-        lotDetailsPanel.addComponent(lotDetailsValuesPanel);
+        lotDetailsLayout.addComponent(captionsPanel);
+        lotDetailsLayout.addComponent(lotDetailsValuesPanel);
     }
 
     private void fillLotsTable() {
@@ -415,8 +408,8 @@ public class MainWindow extends Window implements BasicWindow {
     }
 
     private void updateButtonEnabled() {
-        boolean CurrentUserIsLotOwner = currentLot.getOwnerId() != userId;
-        boolean LotIsActive = currentLot.getState() == Consts.ACTIVE_LOT_STATE;
+        boolean CurrentUserIsLotOwner = currentLot.getOwnerId() == userId;
+        boolean LotIsActive = Consts.ACTIVE_LOT_STATE.equals(currentLot.getState());
         btnAddNewBid.setEnabled(!CurrentUserIsLotOwner && LotIsActive);
         btnCancelTrades.setEnabled(CurrentUserIsLotOwner && LotIsActive);
     }
