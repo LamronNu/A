@@ -4,6 +4,7 @@ import WebService.db.UserDAO;
 import org.apache.log4j.Logger;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -33,6 +34,7 @@ public class Bid {
     //calculated by joins
     private int lotOwnerId;
     private double lotStartPrice;
+    @JoinColumn
     private String ownerName;
     private double lotMaxBidValue;
     //constructors
@@ -85,9 +87,16 @@ public class Bid {
     public void setCreatedOnDate(Date createdOnDate) {
         this.createdOn = createdOnDate;
     }
+    public void setCreatedOnDate(Timestamp createdOnDate) {
+        this.createdOn = new Date(createdOnDate.getTime());//createdOnDate;
+    }
 
-    public Object getCreatedOnDate() {
+    public Date getCreatedOnDate() {
         return createdOn;
+    }
+    public Timestamp getSqlCreatedOnDate() {
+
+        return new Timestamp(createdOn.getTime());
     }
 
     public String getBidderName() {
@@ -103,8 +112,8 @@ public class Bid {
     }
 
     public void setOwnerName(String ownerFirstName, String ownerLastName) {
-        this.ownerName = ownerFirstName + " "
-                + (ownerLastName == null ? "" : ownerLastName);
+        this.ownerName = ownerFirstName +
+                 (ownerLastName == null ? "" : (" " + ownerLastName));
     }
 
     public void setLotMaxBidValue(double lotMaxBidValue) {
@@ -121,6 +130,10 @@ public class Bid {
 
     public double getLotMaxBidValue() {
         return lotMaxBidValue;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     //

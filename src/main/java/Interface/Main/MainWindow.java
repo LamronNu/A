@@ -18,6 +18,7 @@ import com.vaadin.ui.themes.BaseTheme;
 import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class MainWindow extends Window implements BasicWindow {
     private List<Lot> lots;
     private Lot currentLot;
     private boolean IsSelectedLot;
-    private boolean IsTableLock = true;
+    //private boolean IsTableLock = true;
     private Table bidsTable = new Table();
     private List<Bid> bids;
     private VerticalLayout lotDetailsValuesPanel;
@@ -171,7 +172,7 @@ public class MainWindow extends Window implements BasicWindow {
                                 onCancelTrades();
                             }
                         });
-                        //cancelTradesButtonSize = btnCancelTrades.getWidth();
+                        btnCancelTrades.setEnabled(false);
                         lotButtonsFrame.addComponent(btnCancelTrades);
 
                     lotInfoFrame.addComponent(lotButtonsFrame);
@@ -191,7 +192,6 @@ public class MainWindow extends Window implements BasicWindow {
                     bidsFrame.setMargin(new MarginInfo(true, true, false, true));
                     //bidsFrame.setCaption("Bids");
                         initBidsTable();
-                        fillBidsTable();
                     bidsFrame.addComponent(bidsTable);
                     bidsFrame.setComponentAlignment(bidsTable, Alignment.TOP_CENTER);
                         //bid button
@@ -201,11 +201,11 @@ public class MainWindow extends Window implements BasicWindow {
                                 onAddNewBid();
                             }
                         });
-                    updateButtonEnabled();
+//                    updateButtonEnabled();
+                    btnAddNewBid.setEnabled(false);
                     bidsFrame.addComponent(btnAddNewBid);
                     bidsFrame.setComponentAlignment(btnAddNewBid, Alignment.BOTTOM_RIGHT);
-                    //size of lot values -- calc and set
-                    //lotDetailsValuesPanel.setWidth(bidsFrame.getWidth() - remainingTimeLabelSize - cancelTradesButtonSize, Unit.POINTS);
+                    //fillBidsTable();//on prepare lot is unselected
                     //bids panel
                     Panel bidsPanel = new Panel();
                     bidsPanel.setCaption("Bids");
@@ -247,7 +247,7 @@ public class MainWindow extends Window implements BasicWindow {
         bidsTable.removeAllItems();//clear before filling
         if (IsSelectedLot) {
             //get bids
-            bids = null;//??
+            bids = new ArrayList<Bid>();//??
             bids = auction.getAllBidsForLot(currentLot.getId());
             //records
             int i = 0;
@@ -261,7 +261,7 @@ public class MainWindow extends Window implements BasicWindow {
             }
         }
 
-
+        updateButtonEnabled();
     }
 
     private void fillLotDetails() {
@@ -300,6 +300,9 @@ public class MainWindow extends Window implements BasicWindow {
 //start price
         valueLabel = new Label(IsSelectedLot ? (Double.toString(currentLot.getStartPrice()) + " $" ): Consts.EMPTY_STR);
         lotDetailsValuesPanel.addComponent(valueLabel);
+
+        ///debug
+        //log.debug(currentLot.toString());
     }
 
     private void initLotDetails() { //on prepare
@@ -366,7 +369,7 @@ public class MainWindow extends Window implements BasicWindow {
 
     private void fillLotsTable() {
         log.info("refresh lots table");
-        IsTableLock = true;
+        //IsTableLock = true;
         lotsTable.removeAllItems();//clear before filling
 
         // column captions
@@ -397,14 +400,15 @@ public class MainWindow extends Window implements BasicWindow {
         lotsTable.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                if (!IsTableLock){
+                //if (!IsTableLock){
+                //    IsTableLock = true;
                     fillLotDetails();
                     fillBidsTable();
-                    updateButtonEnabled();
-                }
+                //    IsTableLock = false;
+                //}
             }
         });
-        IsTableLock = false;
+       // IsTableLock = false;
     }
 
     private void updateButtonEnabled() {
@@ -421,26 +425,11 @@ public class MainWindow extends Window implements BasicWindow {
         close();
     }
 
-    private void onFinishTrades() {
-        if (!IsSelectedLot) {
-            log.warn("please, select the lot!");
-            showInformation("please, select the lot!");
-            return;
-        }
-        log.info("finish trades for lot: " + currentLot.getName());
-        try {
-            auction.changeLotState(currentLot.getId(), userId, Consts.SOLD_LOT_STATE);
-        } catch (LotUpdateException e) {
-            showInformation(e.getMessage());
-            return;
-        }
-        showInformation("finish trades for lot: " + currentLot.getName());
-        fillLotsTable();//todo ??refresh only 1 record
-    }
+
 
     private void onCancelTrades() {
         if (!IsSelectedLot) {
-            log.warn("please, select the lot!");
+            log.warn("onCancelTrades: please, select the lot!");
             showInformation("please, select the lot!");
             return;
         }
@@ -449,9 +438,10 @@ public class MainWindow extends Window implements BasicWindow {
             auction.cancelLotTrades(currentLot.getId(), userId);
         } catch (LotUpdateException e) {
             showInformation(e.getMessage());
+            log.warn(e.getMessage());
             return;
         }
-        showInformation("cancel trades for lot: " + currentLot.getName());
+        showInformation("Lot: " + currentLot.getName() + " is successfully cancelled");
         fillLotsTable();//todo ??refresh only 1 record
     }
     private void showInformation(String msg) {
@@ -470,7 +460,10 @@ public class MainWindow extends Window implements BasicWindow {
         @Override
     public void onNotify(String message) {
         if (message == Consts.REFRESH_LOTS_MESSAGE) {
+            IsSelectedLot = false;
             fillLotsTable();
+            fillLotDetails();
+            fillBidsTable();
         } else
         if (message == Consts.REFRESH_BIDS_MESSAGE) {
             fillBidsTable();

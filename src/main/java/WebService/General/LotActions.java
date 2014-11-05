@@ -21,12 +21,17 @@ public class LotActions {
 
     //methods
     public boolean addNewLot(String name, Date finishDate, double startPrice, String description, int ownerId){
+        log.info("try to add new lot");
         lot = new Lot(name,  finishDate,  startPrice,  description,  ownerId);
-        return lotDAO.addLot(lot);
+        boolean IsLotAdd = lotDAO.addLot(lot);
+        log.info(IsLotAdd ? "success." : "failure");
+        return IsLotAdd;
     }
 
     public void updateLotState(int lotId, int userId, String newState) throws LotUpdateException {
+
         lot = lotDAO.getLotById(lotId);
+        log.info("try to change state to " + newState + " for lot " + lot.getName() );
        //check can user cancel
         int lotOwnerId = lot.getOwnerId();
         String message = "";
@@ -50,14 +55,21 @@ public class LotActions {
         lot.setState(newState);
         if (!lotDAO.updateLotState(lot)){
             throw new LotUpdateException("sql ex");
-        };
+        }
+        log.info("update state is success");
     }
 
     public List<Lot> getAllLotsForUser(int userId) {
-        return lotDAO.getAllLotsForOwner(userId);
+        log.info("get lots");
+        List<Lot> lots = lotDAO.getAllLotsForOwner(userId);
+        log.info("success. count of lots: " + lots.size());
+        return lots;
     }
 
     public Lot getLotById(int lotId) {
-        return lotDAO.getLotById(lotId);
+        log.info("get lot by id " + lotId);
+        Lot lot = lotDAO.getLotById(lotId);
+        log.info("success.");
+        return lot;
     }
 }
