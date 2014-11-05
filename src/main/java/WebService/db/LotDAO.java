@@ -62,7 +62,8 @@ public class LotDAO {
             String sqlQuery = ("select L.id, L.name, L.finishDate," +
                     " L.startPrice, L.description, L.ownerId," +
                     " L.state, " +
-                    " concat(O.firstName, ' ', case when O.lastName is null then '' else O.lastName end) as lotOwnerName" +
+                    " concat(O.firstName, ' ', case when O.lastName is null then '' else O.lastName end) as lotOwnerName, " +
+                    " (select MAX(value) from bids where lotId = L.id) as lotMaxBidValue" +
                     " from lots as L " +
                     " join users as O on O.id = L.ownerId"
                     + (ownerId == -1 ? "" : " where ownerId=?"));
@@ -82,8 +83,9 @@ public class LotDAO {
                 lot.setDescription(rs.getString("description"));
                 lot.setOwnerId(rs.getInt("ownerId"));
                 lot.setState(rs.getString("state"));
-                //
+                //joined columns
                 lot.setOwnerName(rs.getString("lotOwnerName"));
+                lot.setMaxBidValue(rs.getDouble("lotMaxBidValue"));
                 lots.add(lot);
             }
         } catch (SQLException e) {

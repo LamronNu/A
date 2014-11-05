@@ -307,7 +307,6 @@ public class MainWindow extends Window implements BasicWindow {
 
     private void initLotDetails() { //on prepare
 
-        //lotDetailsLayout.removeAllComponents();//remove current info
         lotDetailsLayout.setMargin(new MarginInfo(false, true, false, false));
         //generate labels
         //
@@ -421,7 +420,7 @@ public class MainWindow extends Window implements BasicWindow {
     private void onLogout() {
         LoginWindow wnd = new LoginWindow(this.parentWindow);
         getCurrent().addWindow(wnd);
-        log.info("close Main window");
+        log.info("close Main window. user " + userName + " is logout");
         close();
     }
 
@@ -453,7 +452,7 @@ public class MainWindow extends Window implements BasicWindow {
         getCurrent().addWindow(wnd);
     }
     private void onAddNewBid() {
-        NewBidWindow wnd = new NewBidWindow(this, userId, currentLot.getId());
+        NewBidWindow wnd = new NewBidWindow(this, userId, currentLot);
         getCurrent().addWindow(wnd);
     }
 
