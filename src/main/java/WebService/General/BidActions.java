@@ -1,7 +1,7 @@
 package WebService.General;
 
-import WebService.Domain.Bid;
-import WebService.db.BidDAO;
+import WebService.entity.Bid;
+import WebService.dao.BidDAO;
 import org.apache.log4j.Logger;
 
 import java.util.List;

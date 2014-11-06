@@ -1,6 +1,6 @@
-package WebService.db;
+package WebService.dao;
 
-import WebService.Domain.Lot;
+import WebService.entity.Lot;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -105,7 +105,7 @@ public class LotDAO {
                             " concat(O.firstName, ' ', case when O.lastName is null then '' else O.lastName end) as lotOwnerName" +
                             " from lots as L " +
                             " join users as O on O.id = L.ownerId" +
-                            " where id=?");
+                            " where L.id=?");
             preparedStatement.setInt(1, lotId);
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -124,6 +124,34 @@ public class LotDAO {
             log.error("catch exception:", e);
         }
         return lot;
+    }
+
+    public List<Lot> getLots() {//todo norrmal name by function
+        List<Lot> lots = new ArrayList<Lot>();
+        try {
+            String sqlQuery = "select L.id, L.name, L.ownerId, "
+                    + " (select MAX(value) from bids where lotId = L.id) as lotMaxBidValue"
+                    + " from lots as L "
+                    + " where  TIMESTAMPDIFF(MINUTE,finishDate,now() ) >= 0 "    //in past
+                    //+ " and State = 'Active'";                                  //active (other lots is or cancelled manually, or sold/not sold automatically
+                    ;
+            PreparedStatement preparedStatement = connection.
+                    prepareStatement(sqlQuery);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Lot lot = new Lot();
+                lot.setId(rs.getInt("id"));
+                lot.setName(rs.getString("name"));
+                lot.setOwnerId(rs.getInt("ownerId"));
+                lot.setMaxBidValue(rs.getDouble("lotMaxBidValue"));
+                lots.add(lot);
+            }
+        } catch (SQLException e) {
+            log.error("catch exception:", e);
+        }
+        return lots;
     }
 }
 

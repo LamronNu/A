@@ -1,6 +1,6 @@
-package WebService.Domain;
+package WebService.entity;
 
-import WebService.db.UserDAO;
+import WebService.dao.UserDAO;
 import org.apache.log4j.Logger;
 
 import javax.persistence.*;

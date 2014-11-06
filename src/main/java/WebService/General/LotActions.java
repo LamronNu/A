@@ -2,8 +2,8 @@ package WebService.General;
 
 import Library.Consts;
 import Library.Exceptions.LotUpdateException;
-import WebService.Domain.Lot;
-import WebService.db.LotDAO;
+import WebService.entity.Lot;
+import WebService.dao.LotDAO;
 import org.apache.log4j.Logger;
 
 import java.util.Date;
@@ -29,29 +29,27 @@ public class LotActions {
     }
 
     public void updateLotState(int lotId, int userId, String newState) throws LotUpdateException {
-
-        lot = lotDAO.getLotById(lotId);
-        log.info("try to change state to " + newState + " for lot " + lot.getName() );
+        lot = lotDAO.getLotById(lotId);//todo get lot, not id
+        log.info("try to change state to " + newState + " for lot " + lot.getId() );
        //check can user cancel
         int lotOwnerId = lot.getOwnerId();
         String message = "";
         if (lotOwnerId != userId){
-            message = "Can't change state to " + newState + " for lot " + lot.getName() +
+            message = "Can't change state to " + newState + " for lot " + lot.getId() +
                     ", because current user is not its owner";
             log.warn(message);
-            //return false;
             throw new LotUpdateException(message);
         }
         String currentState = lot.getState();
         //check can change state
        if ( !Consts.ACTIVE_LOT_STATE.equals(currentState)) {
            message = "Can't change state from " + currentState +
-                   " to " + newState + " for lot " + lot.getName() +
+                   " to " + newState + " for lot " + lot.getId() +
                    " (owner: " + lot.getOwnerName() + ")";
            log.warn(message);
            throw new LotUpdateException(message);
         }
-        //update state in db
+        //update state in dao
         lot.setState(newState);
         if (!lotDAO.updateLotState(lot)){
             throw new LotUpdateException("sql ex");
@@ -71,5 +69,31 @@ public class LotActions {
         Lot lot = lotDAO.getLotById(lotId);
         log.info("success.");
         return lot;
+    }
+
+    public void actualizeLotStates(){
+        log.info("start actualize lot states");
+        List<Lot> lots = lotDAO.getLots();
+        if (lots.size() == 0){
+            log.info("there are no non-actual lots");
+            return;
+        }
+        Double maxPrice;
+        String resultState;
+        String logMessage;
+        for (Lot lot:lots){
+            try {
+                maxPrice = lot.getMaxBidValueOnly();
+                resultState = maxPrice == 0 ? Consts.NOT_SOLD_LOT_STATE:Consts.SOLD_LOT_STATE;
+                logMessage =   "Lot " + lot.getId() + " is "
+                        +  (maxPrice == 0 ?" not sold" : (" sold by price " + maxPrice));
+
+                updateLotState(lot.getId(), lot.getOwnerId(),resultState);
+                log.info(logMessage);
+            } catch (LotUpdateException e) {
+                log.error("catch ex on lot " + lot.getId(), e);
+            }
+        }
+        log.info("successfully changed states. lots count: " + lots.size());
     }
 }

@@ -318,7 +318,7 @@ public final class ExampleUtil {
                 String.class, "$0");
 
         // Create some orders
-        addOrderToContainer(container, "Domain Name", 3, 7.99);
+        addOrderToContainer(container, "entity Name", 3, 7.99);
         addOrderToContainer(container, "SSL Certificate", 1, 119.00);
         addOrderToContainer(container, "Web Hosting", 1, 19.95);
         addOrderToContainer(container, "Email Box", 20, 0.15);

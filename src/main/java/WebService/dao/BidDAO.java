@@ -1,6 +1,6 @@
-package WebService.db;
+package WebService.dao;
 
-import WebService.Domain.Bid;
+import WebService.entity.Bid;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;

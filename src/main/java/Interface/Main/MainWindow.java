@@ -6,8 +6,8 @@ import Interface.BasicWindow;
 import Interface.InformationDialog;
 import Library.Consts;
 import Library.Exceptions.LotUpdateException;
-import WebService.Domain.Bid;
-import WebService.Domain.Lot;
+import WebService.entity.Bid;
+import WebService.entity.Lot;
 import WebService.General.AuctionWs;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.Property;
@@ -219,6 +219,8 @@ public class MainWindow extends Window implements BasicWindow {
 
         content.addComponent(mainFrame);
 
+        //check states
+        auction.actualizeLotStates();
     }
 
     private void initBidsTable() {

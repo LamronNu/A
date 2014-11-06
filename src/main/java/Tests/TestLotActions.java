@@ -2,7 +2,7 @@ package Tests;
 
 import Library.Exceptions.LoginIsAlreadyExistsException;
 import Library.Exceptions.UserDataNotValidException;
-import WebService.Domain.Lot;
+import WebService.entity.Lot;
 import WebService.General.Auction;
 import WebService.General.AuctionWs;
 import org.apache.log4j.Logger;
@@ -41,7 +41,7 @@ public class TestLotActions {
             Date finishDate = new Date();
             finishDate.setMonth(11);
             finishDate.setDate(20 + i);
-            boolean IsCreated = auction.CreateNewLot("lot" + i, finishDate, 10. + i,"test_lot_"+i,userId);
+            boolean IsCreated = auction.createNewLot("lot" + i, finishDate, 10. + i, "test_lot_" + i, userId);
             log.info(IsCreated ? "lot is created":"lot is not created");
 
         }
