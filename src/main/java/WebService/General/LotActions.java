@@ -29,7 +29,7 @@ public class LotActions {
     }
 
     public void updateLotState(int lotId, int userId, String newState) throws LotUpdateException {
-        lot = lotDAO.getLotById(lotId);//todo get lot, not id
+        lot = lotDAO.getLotById(lotId);//todo receive lot, not id
         log.info("try to change state to " + newState + " for lot " + lot.getId() );
        //check can user cancel
         int lotOwnerId = lot.getOwnerId();
@@ -95,5 +95,9 @@ public class LotActions {
             }
         }
         log.info("successfully changed states. lots count: " + lots.size());
+    }
+
+    public boolean updateLot(Lot lot) {
+        return false;//todo!!!
     }
 }

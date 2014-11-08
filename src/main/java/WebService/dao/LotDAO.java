@@ -133,7 +133,7 @@ public class LotDAO {
                     + " (select MAX(value) from bids where lotId = L.id) as lotMaxBidValue"
                     + " from lots as L "
                     + " where  TIMESTAMPDIFF(MINUTE,finishDate,now() ) >= 0 "    //in past
-                    //+ " and State = 'Active'";                                  //active (other lots is or cancelled manually, or sold/not sold automatically
+                    + " and State = 'Active'";                                  //active (other lots is or cancelled manually, or sold/not sold automatically
                     ;
             PreparedStatement preparedStatement = connection.
                     prepareStatement(sqlQuery);

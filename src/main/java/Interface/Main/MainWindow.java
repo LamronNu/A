@@ -6,9 +6,9 @@ import Interface.BasicWindow;
 import Interface.InformationDialog;
 import Library.Consts;
 import Library.Exceptions.LotUpdateException;
+import WebService.General.AuctionWs;
 import WebService.entity.Bid;
 import WebService.entity.Lot;
-import WebService.General.AuctionWs;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.Property;
 import com.vaadin.shared.ui.MarginInfo;
@@ -32,6 +32,7 @@ public class MainWindow extends Window implements BasicWindow {
     private final Table lotsTable = new Table();
     private final Button btnAddNewBid;
     private final Button btnCancelTrades;
+    private final VerticalLayout actionsFrame;
     //private final float cancelTradesButtonSize;
     private HorizontalLayout lotDetailsLayout;
     private VerticalLayout bidsFrame;
@@ -48,6 +49,13 @@ public class MainWindow extends Window implements BasicWindow {
     private List<Bid> bids;
     private VerticalLayout lotDetailsValuesPanel;
     private SimpleDateFormat dateFormat;
+    private CheckBox hideNoneActiveLotsCheckBox;
+    private CheckBox showOnlyMyLotsCheckBox;
+    private CheckBox showActualLotsCheckBox;
+    private Button actualizeLotStatesButton;
+    private List<Lot> totalLots;
+
+    private Button editLotButton;
     //private float remainingTimeLabelSize;
 
     public MainWindow(UI components, int userId) {
@@ -100,7 +108,8 @@ public class MainWindow extends Window implements BasicWindow {
             //        lotsFrame.setVisible(true);
 
                         //----LOTS INFO (TABLE)
-                        fillLotsTable();
+                        initLotsTable();
+
                     lotsFrame.addComponent(lotsTable);
                     lotsFrame.setComponentAlignment(lotsTable, Alignment.TOP_CENTER);
                         Button btnAddNewLot = new Button("New lot",new Button.ClickListener() {
@@ -158,7 +167,7 @@ public class MainWindow extends Window implements BasicWindow {
                     lotDetailsLayout.setHeight(100, Unit.PERCENTAGE);
                     //lotDetailsLayout.setWidth(150, Unit.POINTS);
                         initLotDetails();
-                        fillLotDetails();
+
                     lotInfoFrame.addComponent(lotDetailsLayout);
                     lotInfoFrame.setComponentAlignment(lotDetailsLayout, Alignment.BOTTOM_LEFT);
                     //lot buttons
@@ -210,34 +219,109 @@ public class MainWindow extends Window implements BasicWindow {
                     Panel bidsPanel = new Panel();
                     bidsPanel.setCaption("Bids");
                     bidsPanel.setContent(bidsFrame);
-                    bidsPanel.setWidth(100, Unit.PERCENTAGE);//Undefined();
-                rightFrame.addComponent(bidsPanel);
+                    bidsPanel.setWidth(50, Unit.PERCENTAGE);//Undefined();
+
+                    //////
+                    //actions panel
+                    actionsFrame = new VerticalLayout();
+                    initActionsFrame();
+                    //
+                    Panel actionsPanel = new Panel();
+                    actionsPanel.setCaption("Actions");
+                    actionsPanel.setContent(actionsFrame);
+                    actionsPanel.setWidthUndefined();
+                    //////
+                    HorizontalLayout bottomRightFrame = new HorizontalLayout();
+
+                    bottomRightFrame.addComponent(bidsPanel);
+                    bottomRightFrame.addComponent(actionsPanel);
+
+                rightFrame.addComponent(bottomRightFrame);
                 //rightFrame.setMargin(new MarginInfo(false,false,false,true));
             //auctionFrame.addComponent(rightFrame);
 
             mainFrame.addComponent(rightFrame);
 
         content.addComponent(mainFrame);
+//fill data
+        fillLotsTable(true);
+        fillLotDetails();
 
-        //check states
-        auction.actualizeLotStates();
+    }
+
+    private void initActionsFrame() {
+//        actionsFrame
+        hideNoneActiveLotsCheckBox = new CheckBox("hide non-active lots");
+        hideNoneActiveLotsCheckBox.setDescription("shows only active lots");
+        hideNoneActiveLotsCheckBox.setImmediate(true);
+        actionsFrame.addComponent(hideNoneActiveLotsCheckBox);
+        hideNoneActiveLotsCheckBox.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+                fillLotsTable(false);
+            }
+        });
+        //
+        showOnlyMyLotsCheckBox = new CheckBox("show only my lots");
+        showOnlyMyLotsCheckBox.setDescription("shows lots only for " + userName);
+        showOnlyMyLotsCheckBox.setImmediate(true);
+        actionsFrame.addComponent(showOnlyMyLotsCheckBox);
+        showOnlyMyLotsCheckBox.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+                fillLotsTable(false);
+            }
+        });
+        //
+        showActualLotsCheckBox = new CheckBox("show only actual lots");
+        showActualLotsCheckBox.setDescription("shows only active lots and not for " + userName);
+        showActualLotsCheckBox.setImmediate(true);
+        actionsFrame.addComponent(showActualLotsCheckBox);
+        showActualLotsCheckBox.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+                fillLotsTable(false);
+            }
+        });
+        //
+        actualizeLotStatesButton = new Button("actualize lot states");
+        actualizeLotStatesButton.setDescription("actualize lot states (to Sold or Not sold)");
+        actualizeLotStatesButton.setImmediate(true);
+        actualizeLotStatesButton.setStyleName(BaseTheme.BUTTON_LINK);
+        actualizeLotStatesButton.setHeight(18, Unit.POINTS);
+        actionsFrame.addComponent(actualizeLotStatesButton);
+        actualizeLotStatesButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                fillLotsTable(false);
+            }
+        });
+        //
+        editLotButton = new Button("Edit lot");
+        editLotButton.setDescription("actualize lot states (to Sold or Not sold)");
+        editLotButton.setStyleName(BaseTheme.BUTTON_LINK);
+        actionsFrame.addComponent(editLotButton);
+        editLotButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                editLot();
+            }
+        });
+    }
+
+    private void editLot() {
+        log.info("try to edit lot: " + (IsSelectedLot ?currentLot.getName() : Consts.PLEASE_SELECT_LOT_MESSAGE));
+        if (!IsSelectedLot) return;
+        LotWindow wnd = new LotWindow(this, userId, currentLot);
+        getCurrent().addWindow(wnd);
     }
 
     private void initBidsTable() {
         log.info("init bids table");
-
         // column captions
         bidsTable.addContainerProperty("Bid", Double.class, null);
         bidsTable.addContainerProperty("Date", Date.class, null);
         bidsTable.addContainerProperty("Bidder", String.class, null);
-        //temp
-        //bidsTable.addContainerProperty("lotStartPrice", Double.class, null);
-        //bidsTable.addContainerProperty("lotMaxBidValue", Double.class, null);
-        // Allow the user to collapse and uncollapse columns
-//        bidsTable.setColumnCollapsingAllowed(true);
-//        bidsTable.setColumnCollapsed("lotStartPrice", true);
-//        bidsTable.setColumnCollapsed("lotMaxBidValue", true);
-
 
         bidsTable.setPageLength(6);
         bidsTable.setWidth(100, Unit.PERCENTAGE);//Undefined();
@@ -262,7 +346,6 @@ public class MainWindow extends Window implements BasicWindow {
 
             }
         }
-
         updateButtonEnabled();
     }
 
@@ -270,7 +353,7 @@ public class MainWindow extends Window implements BasicWindow {
         //get lot
         Object selectedValue = lotsTable.getValue();
         IsSelectedLot = selectedValue != null;
-        currentLot =  IsSelectedLot ? lots.get((Integer) selectedValue) : new Lot();
+        currentLot =  IsSelectedLot ? totalLots.get((Integer) selectedValue) : new Lot();
         log.info("refresh lot details. Lot: " + (IsSelectedLot ?currentLot.getName() : Consts.PLEASE_SELECT_LOT_MESSAGE));
         lotDetailsValuesPanel.removeAllComponents();
 //code
@@ -367,56 +450,94 @@ public class MainWindow extends Window implements BasicWindow {
         lotDetailsLayout.addComponent(captionsPanel);
         lotDetailsLayout.addComponent(lotDetailsValuesPanel);
     }
-
-    private void fillLotsTable() {
-        log.info("refresh lots table");
-        //IsTableLock = true;
-        lotsTable.removeAllItems();//clear before filling
-
+    private void initLotsTable() {
+        log.info("init lots table");
         // column captions
         lotsTable.addContainerProperty("Code", Integer.class, null);
         lotsTable.addContainerProperty("Name", String.class, null);
         lotsTable.addContainerProperty("Finish date", Date.class, null);
         lotsTable.addContainerProperty("State", String.class, null);
-        //get lots
-        lots = auction.getAllLotsForUser(-1);
-        //records
-        int i = 0;
-        for (Lot lot : lots) {
-            lotsTable.addItem(
-                    new Object[]{lot.getId(), lot.getName(), lot.getFinishDate(),lot.getState()}, i++);
-           // lotsTable.setStyleName(lot.getOwnerId() == userId ? "another" : "normal");
 
-        }
         lotsTable.setPageLength(15);
         //footer
         lotsTable.setFooterVisible(true);
-        // Add some total sum and description to footer
         lotsTable.setColumnFooter("Finish date", "Total count");
-        lotsTable.setColumnFooter("State", Integer.toString(i));
+
         //selectable
         lotsTable.setSelectable(true);
-        lotsTable.setColumnCollapsingAllowed(true);
-        // Handle selection change.
+        //lotsTable.setColumnCollapsingAllowed(true);
         lotsTable.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                //if (!IsTableLock){
-                //    IsTableLock = true;
-                    fillLotDetails();
-                    fillBidsTable();
-                //    IsTableLock = false;
-                //}
+                fillLotDetails();
+                fillBidsTable();
             }
         });
-       // IsTableLock = false;
+
+    }
+    private void fillLotsTable(boolean fullRefresh) {
+        //check states
+        auction.actualizeLotStates();
+        log.info("refresh lots table");
+
+        lotsTable.removeAllItems();//clear before filling
+//filters
+        boolean hideNonActiveLots = hideNoneActiveLotsCheckBox.getValue();
+        boolean showOnlyMyLots = showOnlyMyLotsCheckBox.getValue();
+        boolean showActualLots = showActualLotsCheckBox.getValue();
+        boolean isCurrentUserLotOwner;
+        boolean isLotActive;
+        //get lots
+        lots = fullRefresh ? auction.getAllLotsForUser(-1) : lots;
+        totalLots = new ArrayList<Lot>();
+        //records
+        int i = 0;
+        for (Lot lot : lots) {
+            //if (!fullRefresh) {
+                isCurrentUserLotOwner = lot.getOwnerId() == userId;
+                isLotActive = Consts.ACTIVE_LOT_STATE.equals(lot.getState());
+                if (hideNonActiveLots){
+                    if (!isLotActive) continue;
+                }
+                if(showOnlyMyLots){
+                    if (!isCurrentUserLotOwner) continue;
+                }
+                if(showActualLots){
+                    if (!isLotActive || isCurrentUserLotOwner) continue;
+                }
+            //}
+            totalLots.add(lot);
+            Object[] lotItem = new Object[]{lot.getId(), lot.getName(), lot.getFinishDate(),lot.getState()};
+            lotsTable.addItem(lotItem, i++);
+        }
+        //total count
+        lotsTable.setColumnFooter("State", Integer.toString(i));
+        log.info("success. count of lots: " + i);
     }
 
     private void updateButtonEnabled() {
-        boolean CurrentUserIsLotOwner = currentLot.getOwnerId() == userId;
-        boolean LotIsActive = Consts.ACTIVE_LOT_STATE.equals(currentLot.getState());
-        btnAddNewBid.setEnabled(!CurrentUserIsLotOwner && LotIsActive);
-        btnCancelTrades.setEnabled(CurrentUserIsLotOwner && LotIsActive);
+        boolean isEnabled;
+        String description;
+        boolean currentUserIsLotOwner = currentLot.getOwnerId() == userId;
+        boolean lotIsActive = Consts.ACTIVE_LOT_STATE.equals(currentLot.getState());
+        //add new bid
+        isEnabled = !currentUserIsLotOwner && lotIsActive;
+        description = isEnabled ? "push to add new bid"
+                : ("button is disabled. cause: "
+                    + (currentUserIsLotOwner ? "you is lot owner" : "")
+                    + (currentUserIsLotOwner && lotIsActive? ", " : "")
+                    + (!lotIsActive? "lot is not active" : ""));
+        btnAddNewBid.setEnabled(isEnabled);
+        btnAddNewBid.setDescription(description);
+        //cancel trades
+        isEnabled = currentUserIsLotOwner && lotIsActive;
+        description = isEnabled ? "push to cancel trades"
+                : ("button is disabled. cause: "
+                + (!currentUserIsLotOwner ? "you is not lot owner" : "")
+                + (!currentUserIsLotOwner && !lotIsActive? ", " : "")
+                + (!lotIsActive? "lot is not active" : ""));
+        btnCancelTrades.setEnabled(isEnabled);
+        btnCancelTrades.setDescription(description);
     }
 
     private void onLogout() {
@@ -443,14 +564,14 @@ public class MainWindow extends Window implements BasicWindow {
             return;
         }
         showInformation("Lot: " + currentLot.getName() + " is successfully cancelled");
-        fillLotsTable();//todo ??refresh only 1 record
+        fillLotsTable(true);//todo ??refresh only 1 record
     }
     private void showInformation(String msg) {
         InformationDialog wnd = new InformationDialog(this, msg);
         getCurrent().addWindow(wnd);
     }
     private void onAddNewLot() {
-        NewLotWindow wnd = new NewLotWindow(this, userId);
+        LotWindow wnd = new LotWindow(this, userId, null);
         getCurrent().addWindow(wnd);
     }
     private void onAddNewBid() {
@@ -462,7 +583,7 @@ public class MainWindow extends Window implements BasicWindow {
     public void onNotify(String message) {
         if (message == Consts.REFRESH_LOTS_MESSAGE) {
             IsSelectedLot = false;
-            fillLotsTable();
+            fillLotsTable(true);
             fillLotDetails();
             fillBidsTable();
         } else
