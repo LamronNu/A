@@ -126,7 +126,7 @@ public class LotDAO {
         return lot;
     }
 
-    public List<Lot> getLots() {//todo norrmal name by function
+    public List<Lot> getLots() {//todo norrmal name due function
         List<Lot> lots = new ArrayList<Lot>();
         try {
             String sqlQuery = "select L.id, L.name, L.ownerId, "
@@ -153,6 +153,29 @@ public class LotDAO {
         }
         return lots;
     }
+
+    public boolean updateLot(Lot lot) {
+        boolean result = false;
+        try {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("update lots set name=?, finishDate=?,startPrice=?,description=?,ownerId=?,state=?" +
+                            "where Id=?");
+            // Parameters start with 1
+            preparedStatement.setString(1, lot.getName());
+            preparedStatement.setTimestamp(2, lot.getSqlFinishDate());
+            preparedStatement.setDouble(3, lot.getStartPrice());
+            preparedStatement.setString(4, lot.getDescription());
+            preparedStatement.setInt(5, lot.getOwnerId());
+            preparedStatement.setString(6, lot.getState());
+            //id
+            preparedStatement.setInt(7, lot.getId());
+            preparedStatement.executeUpdate();
+            result = true;
+        } catch (SQLException e) {
+            log.error("catch exception:", e);
+        }
+        return result;
+    }
 }
 
 //    public void deleteUser(int userId) {
@@ -168,26 +191,7 @@ public class LotDAO {
 //        }
 //    }
 //
-//    public void updateLot(Lot lot) {
-//        try {
-//            PreparedStatement preparedStatement = connection
-//                    .prepareStatement("update lots set name=?, finishDate=?,startPrice=?,description=?,ownerId=?,state=?" +
-//                            "where Id=?");
-//            // Parameters start with 1
-//            preparedStatement.setString(1, lot.getName());
-//            preparedStatement.setDate(2, lot.getFinishDate());
-//            preparedStatement.setDouble(3, lot.getStartPrice());
-//            preparedStatement.setString(4, lot.getDescription());
-//            preparedStatement.setInt(5, lot.getOwnerId());
-//            preparedStatement.setString(6, lot.getState());
-//            //id
-//            preparedStatement.setInt(7, lot.getId());
-//            preparedStatement.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            log.error("catch exception:", e);
-//        }
-//    }
+
 
 //    public List<Lot> getAllLots() {
 //        List<Lot> lots = new ArrayList<Lot>();

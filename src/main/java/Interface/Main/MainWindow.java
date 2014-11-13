@@ -52,7 +52,7 @@ public class MainWindow extends Window implements BasicWindow {
     private CheckBox hideNoneActiveLotsCheckBox;
     private CheckBox showOnlyMyLotsCheckBox;
     private CheckBox showActualLotsCheckBox;
-    private Button actualizeLotStatesButton;
+    private Button refreshLotStatesButton;
     private List<Lot> totalLots;
 
     private Button editLotButton;
@@ -175,6 +175,18 @@ public class MainWindow extends Window implements BasicWindow {
                     lotButtonsFrame.setHeight(100, Unit.PERCENTAGE);
                     //lotButtonsFrame.setWidth(150, Unit.POINTS);
 
+                        editLotButton = new Button("Edit lot");
+                        editLotButton.setDescription("edit selected lot");
+                        editLotButton.setStyleName(BaseTheme.BUTTON_LINK);
+                        lotButtonsFrame.addComponent(editLotButton);
+                        editLotButton.addClickListener(new Button.ClickListener() {
+                            @Override
+                            public void buttonClick(Button.ClickEvent clickEvent) {
+                                editLot();
+                            }
+                        });
+                        lotButtonsFrame.setComponentAlignment(editLotButton, Alignment.MIDDLE_CENTER);
+                        //
                         btnCancelTrades = new Button("Cancel trades",new Button.ClickListener() {
                             @Override
                             public void buttonClick(Button.ClickEvent clickEvent) {
@@ -251,7 +263,7 @@ public class MainWindow extends Window implements BasicWindow {
 
     private void initActionsFrame() {
 //        actionsFrame
-        hideNoneActiveLotsCheckBox = new CheckBox("hide non-active lots");
+        hideNoneActiveLotsCheckBox = new CheckBox("show only active lots");
         hideNoneActiveLotsCheckBox.setDescription("shows only active lots");
         hideNoneActiveLotsCheckBox.setImmediate(true);
         actionsFrame.addComponent(hideNoneActiveLotsCheckBox);
@@ -273,7 +285,7 @@ public class MainWindow extends Window implements BasicWindow {
             }
         });
         //
-        showActualLotsCheckBox = new CheckBox("show only actual lots");
+        showActualLotsCheckBox = new CheckBox("show actual lots");
         showActualLotsCheckBox.setDescription("shows only active lots and not for " + userName);
         showActualLotsCheckBox.setImmediate(true);
         actionsFrame.addComponent(showActualLotsCheckBox);
@@ -284,34 +296,35 @@ public class MainWindow extends Window implements BasicWindow {
             }
         });
         //
-        actualizeLotStatesButton = new Button("actualize lot states");
-        actualizeLotStatesButton.setDescription("actualize lot states (to Sold or Not sold)");
-        actualizeLotStatesButton.setImmediate(true);
-        actualizeLotStatesButton.setStyleName(BaseTheme.BUTTON_LINK);
-        actualizeLotStatesButton.setHeight(18, Unit.POINTS);
-        actionsFrame.addComponent(actualizeLotStatesButton);
-        actualizeLotStatesButton.addClickListener(new Button.ClickListener() {
+        refreshLotStatesButton = new Button("refresh lots");
+        refreshLotStatesButton.setDescription("refreshes lots");
+        refreshLotStatesButton.setImmediate(true);
+        //refreshLotStatesButton.setStyleName(BaseTheme.BUTTON_LINK);
+        refreshLotStatesButton.setHeight(18, Unit.POINTS);
+        actionsFrame.addComponent(refreshLotStatesButton);
+        refreshLotStatesButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 fillLotsTable(false);
             }
         });
-        //
-        editLotButton = new Button("Edit lot");
-        editLotButton.setDescription("actualize lot states (to Sold or Not sold)");
-        editLotButton.setStyleName(BaseTheme.BUTTON_LINK);
-        actionsFrame.addComponent(editLotButton);
-        editLotButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                editLot();
-            }
-        });
+        actionsFrame.setComponentAlignment(refreshLotStatesButton, Alignment.BOTTOM_CENTER);
+
     }
 
     private void editLot() {
         log.info("try to edit lot: " + (IsSelectedLot ?currentLot.getName() : Consts.PLEASE_SELECT_LOT_MESSAGE));
         if (!IsSelectedLot) return;
+        if (!Consts.ACTIVE_LOT_STATE.equals(currentLot.getState())){
+            showInformation("Can`t edit lot: lot is not in active state!");
+            log.warn("Can`t edit lot: lot is not in active state");
+            return;
+        }
+        if (currentLot.getOwnerId() != userId){
+            showInformation("Can`t edit lot: you is not lot owner!");
+            log.warn("Can`t edit lot: current user is not lot owner");
+            return;
+        }
         LotWindow wnd = new LotWindow(this, userId, currentLot);
         getCurrent().addWindow(wnd);
     }
@@ -477,7 +490,7 @@ public class MainWindow extends Window implements BasicWindow {
     }
     private void fillLotsTable(boolean fullRefresh) {
         //check states
-        auction.actualizeLotStates();
+        //auction.actualizeLotStates();//on sheduler
         log.info("refresh lots table");
 
         lotsTable.removeAllItems();//clear before filling

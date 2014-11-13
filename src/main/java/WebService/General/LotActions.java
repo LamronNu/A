@@ -83,7 +83,7 @@ public class LotActions {
         String logMessage;
         for (Lot lot:lots){
             try {
-                maxPrice = lot.getMaxBidValueOnly();
+                maxPrice = lot.getMaxBidValue();
                 resultState = maxPrice == 0 ? Consts.NOT_SOLD_LOT_STATE:Consts.SOLD_LOT_STATE;
                 logMessage =   "Lot " + lot.getId() + " is "
                         +  (maxPrice == 0 ?" not sold" : (" sold by price " + maxPrice));
@@ -98,6 +98,9 @@ public class LotActions {
     }
 
     public boolean updateLot(Lot lot) {
-        return false;//todo!!!
+        log.info("try update lot " + lot.getId());
+        boolean result = lotDAO.updateLot(lot);
+        log.info("success. lot " + lot.getId() + " is updated");
+        return result;
     }
 }

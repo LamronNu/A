@@ -37,8 +37,8 @@ public class Bid {
     @JoinColumn
     private String ownerName;
     private double lotMaxBidValue;
-    //constructors
 
+    //constructors
     public Bid(double value, int lotId, int ownerId) {
         this.value = value;
         this.lotId = lotId;
