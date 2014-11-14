@@ -299,7 +299,7 @@ public class MainWindow extends Window implements BasicWindow {
         refreshLotStatesButton = new Button("refresh lots");
         refreshLotStatesButton.setDescription("refreshes lots");
         refreshLotStatesButton.setImmediate(true);
-        //refreshLotStatesButton.setStyleName(BaseTheme.BUTTON_LINK);
+        refreshLotStatesButton.setStyleName(BaseTheme.BUTTON_LINK);
         refreshLotStatesButton.setHeight(18, Unit.POINTS);
         actionsFrame.addComponent(refreshLotStatesButton);
         refreshLotStatesButton.addClickListener(new Button.ClickListener() {
