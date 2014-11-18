@@ -6,7 +6,9 @@
    <!-- <listener>
         <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
     </listener>-->
-
+    <listener>
+        <listener-class>WebService.General.StartWebServiceListener</listener-class>
+    </listener>
     <!-- WS-->
     <servlet>
         <description>JAX-WS endpoint</description>
