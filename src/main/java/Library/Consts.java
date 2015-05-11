@@ -40,13 +40,18 @@ public class Consts {
         //get profile name
         Properties env = System.getProperties();
         String profile = env.getProperty("profile");
-        switch (profile){
-            case "dev":
-                return "http://localhost:8100/services/auction";
-            case "prod":
-                return "http://auction-example.herokuapp.com:8100/services/auction";
-            default: //as dev
-                return "http://localhost:8100/services/auction";
-        }
+        if ("prod".equals(profile))
+            return "http://auction-example.herokuapp.com:8100/services/auction";
+        else
+            return "http://localhost:8100/services/auction";
+
+//        switch (profile){
+//            case "dev":
+//                return "http://localhost:8100/services/auction";
+//            case "prod":
+//                return "http://auction-example.herokuapp.com:8100/services/auction";
+//            default: //as dev
+//                return "http://localhost:8100/services/auction";
+//        }
     }
 }
