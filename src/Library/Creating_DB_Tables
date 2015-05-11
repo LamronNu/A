@@ -1,0 +1,44 @@
+use auction;
+/*Users*/
+
+CREATE TABLE users
+(
+    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    createdOn timestamp NOT NULL,
+    Login varchar (50) NOT NULL,
+    password varchar (50) NOT NULL,
+    firstName varchar (50) NOT NULL,
+    lastName varchar (50)
+);
+/*ALTER TABLE users ADD CONSTRAINT unique_userid UNIQUE (id);*/
+/*lots*/
+
+CREATE TABLE lots
+(
+    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    createdOn timestamp NOT NULL,
+    name varchar(100) NOT NULL,
+    finishDate timestamp NOT NULL,
+    startPrice float (15, 2) NOT NULL,
+    description varchar (500),
+    ownerId int  NOT NULL,
+    state varchar (10) DEFAULT 'Active' NOT NULL
+);
+/*ALTER TABLE lots ADD CONSTRAINT unique_lotid UNIQUE (id);*/
+ALTER TABLE lots ADD CONSTRAINT lots_user
+  FOREIGN KEY (ownerId) REFERENCES users (id);
+
+/*bids*/
+CREATE TABLE bids
+(
+    id int PRIMARY KEY NOT NULL,
+    lotId int NOT NULL,
+    ownerId int NOT NULL,
+    value float (15, 2) NOT NULL,
+    createdOn timestamp  NOT NULL
+);
+/*ALTER TABLE bids ADD CONSTRAINT unique_bidid UNIQUE (id);*/
+ALTER TABLE bids ADD CONSTRAINT bids_user
+  FOREIGN KEY (ownerId) REFERENCES users (id);
+ALTER TABLE bids ADD CONSTRAINT lots_user
+  FOREIGN KEY (lotId) REFERENCES lots (id);
