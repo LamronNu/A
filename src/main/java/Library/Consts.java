@@ -6,7 +6,7 @@ package Library;
 public class Consts {
 
     //webService consts
-    public static final String WEB_SERVICE_URL = "http://localhost:8000/services/auction";
+    public static final String WEB_SERVICE_URL = "http://localhost:8100/services/auction";
     public static final String TARGET_NAMESPACE = "http://www.jbs.com.ua/wsdl";
 
     //user consts

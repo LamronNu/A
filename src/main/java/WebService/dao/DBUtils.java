@@ -16,18 +16,25 @@ import java.util.Properties;
 public class DBUtils {
     private static Connection connection = null;
     private static final Logger log = Logger.getLogger(DBUtils.class);
+
+
     public static Connection getConnection() {
         if (connection != null)
             return connection;
         else {
             try {
+                //get profile name
+                Properties env = System.getProperties();
+                String profile = env.getProperty("profile");
+
+                //get connection
                 Properties prop = new Properties();
                 InputStream inputStream = DBUtils.class.getClassLoader().getResourceAsStream("db.properties");
                 prop.load(inputStream);
-                String driver = prop.getProperty("driver");
-                String url = prop.getProperty("url");
-                String user = prop.getProperty("user");
-                String password = prop.getProperty("password");
+                String driver = prop.getProperty(profile + ".driver");
+                String url = prop.getProperty(profile + ".url");
+                String user = prop.getProperty(profile + ".user");
+                String password = prop.getProperty(profile + ".password");
                 Class.forName(driver);
                 connection = DriverManager.getConnection(url, user, password);
             } catch (ClassNotFoundException e) {
