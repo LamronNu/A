@@ -1,13 +1,19 @@
 package Library;
 
+import java.util.Properties;
+
 /**
  * Created by Olga on 22.09.2014.
  */
 public class Consts {
 
     //webService consts
-    public static final String WEB_SERVICE_URL = "http://localhost:8100/services/auction";
-    public static final String TARGET_NAMESPACE = "http://www.jbs.com.ua/wsdl";
+
+
+    public static final String WEB_SERVICE_URL = getWebServiceUrl();
+
+
+    public static final String TARGET_NAMESPACE = "http://www.auction-example.herokuapp.com/wsdl";
 
     //user consts
     public static final String LOGIN_IS_ALREADY_EXISTS_MESSAGE = "USER_LOGIN_IS_ALREADY_EXISTS";
@@ -29,4 +35,18 @@ public class Consts {
     public static final String PLEASE_SELECT_LOT_MESSAGE = "< Please, select lot >";
 
     public static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
+
+    private static String getWebServiceUrl(){
+        //get profile name
+        Properties env = System.getProperties();
+        String profile = env.getProperty("profile");
+        switch (profile){
+            case "dev":
+                return "http://localhost:8100/services/auction";
+            case "prod":
+                return "http://auction-example.herokuapp.com:8100/services/auction";
+            default: //as dev
+                return "http://localhost:8100/services/auction";
+        }
+    }
 }
