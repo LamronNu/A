@@ -8,7 +8,7 @@ import org.quartz.SchedulerException;
 import javax.xml.ws.Endpoint;
 
 public class AuctionPublisher {
-    private static final Logger log = Logger.getLogger(AuctionPublisher.class);
+    private static final Logger log = Logger.getLogger(AuctionPublisher.class);//LogManager.getRootLogger();
     public static void main(String[] args) {
 
         new AuctionPublisher().publish();
