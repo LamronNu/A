@@ -128,7 +128,33 @@
                     <webXml>web\WEB-INF\web.xml</webXml>
                 </configuration>
             </plugin>
+
+            <!--run ws-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                        <configuration>
+                            <assembleDirectory>target</assembleDirectory>
+                            <programs>
+                                <program>
+                                    <mainClass>WebService.General.AuctionPublisher</mainClass>
+                                    <name>app</name>
+                                </program>
+                            </programs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
+
     </build>
 
     <profiles>
