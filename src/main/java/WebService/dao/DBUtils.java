@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 /**
@@ -50,5 +51,55 @@ public class DBUtils {
             return connection;
         }
 
+    }
+
+    public static void createTables() throws SQLException {
+        String sqlCreate = new String() +
+                /*Users*/
+                "\n" +
+                "CREATE TABLE users\n" +
+                "(\n" +
+                "    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,\n" +
+                "    createdOn timestamp NOT NULL,\n" +
+                "    Login varchar (50) NOT NULL,\n" +
+                "    password varchar (50) NOT NULL,\n" +
+                "    firstName varchar (50) NOT NULL,\n" +
+                "    lastName varchar (50)\n" +
+                ");\n" +
+//                "/*ALTER TABLE users ADD CONSTRAINT unique_userid UNIQUE (id);*/\n" +
+                /*lots*/
+                "\n" +
+                "CREATE TABLE lots\n" +
+                "(\n" +
+                "    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,\n" +
+                "    createdOn timestamp NOT NULL,\n" +
+                "    name varchar(100) NOT NULL,\n" +
+                "    finishDate timestamp NOT NULL,\n" +
+                "    startPrice float (15, 2) NOT NULL,\n" +
+                "    description varchar (500),\n" +
+                "    ownerId int  NOT NULL,\n" +
+                "    state varchar (10) DEFAULT 'Active' NOT NULL\n" +
+                ");\n" +
+//                "/*ALTER TABLE lots ADD CONSTRAINT unique_lotid UNIQUE (id);*/\n" +
+                "ALTER TABLE lots ADD CONSTRAINT lots_user\n" +
+                "  FOREIGN KEY (ownerId) REFERENCES users (id);\n" +
+                "\n" +
+//                "/*bids*/\n" +
+                "CREATE TABLE bids\n" +
+                "(\n" +
+                "    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,\n" +
+                "    lotId int NOT NULL,\n" +
+                "    ownerId int NOT NULL,\n" +
+                "    value float (15, 2) NOT NULL,\n" +
+                "    createdOn timestamp  NOT NULL\n" +
+                ");\n" +
+//                "/*ALTER TABLE bids ADD CONSTRAINT unique_bidid UNIQUE (id);*/\n" +
+                "ALTER TABLE bids ADD CONSTRAINT bids_user\n" +
+                "  FOREIGN KEY (ownerId) REFERENCES users (id);\n" +
+                "ALTER TABLE bids ADD CONSTRAINT lots_user\n" +
+                "  FOREIGN KEY (lotId) REFERENCES lots (id);";
+
+        Statement stmt = getConnection().createStatement();
+        stmt.execute(sqlCreate);
     }
 }
