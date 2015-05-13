@@ -12,7 +12,7 @@ public class StartWebServiceListener implements  ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        //new AuctionPublisher().publish();
+        new AuctionPublisher().publish();
     }
 
     @Override
