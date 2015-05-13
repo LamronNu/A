@@ -8,11 +8,7 @@ import java.util.Properties;
 public class Consts {
 
     //webService consts
-
-
     public static final String WEB_SERVICE_URL = getWebServiceUrl();
-
-
     public static final String TARGET_NAMESPACE = "http://www.auction-example.herokuapp.com/wsdl";
 
     //user consts
@@ -36,10 +32,15 @@ public class Consts {
 
     public static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
 
+    //use profile
+    public static final String PROFILE_DEFAULT = "prod";
+    public static final String PROFILE_PRODUCTION = "prod";
+
     private static String getWebServiceUrl(){
         //get profile name
         Properties env = System.getProperties();
         String profile = env.getProperty("profile");
+        profile = profile == null ? PROFILE_DEFAULT : profile;
         if ("prod".equals(profile))
             return "http://auction-example.herokuapp.com:80/services/auction";
         else

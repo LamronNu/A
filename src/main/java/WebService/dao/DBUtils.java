@@ -1,10 +1,13 @@
 package WebService.dao;
 
+import Library.Consts;
 import org.apache.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -26,18 +29,25 @@ public class DBUtils {
                 //get profile name
                 Properties env = System.getProperties();
                 String profile = env.getProperty("profile");
-                profile = profile == null ? "dev" : profile;
+                log.info("get system property 'profile': " + profile);
+                profile = profile == null ? Consts.PROFILE_DEFAULT : profile;
+                log.info("use profile: " + profile);
 
-                //get connection
-                Properties prop = new Properties();
-                InputStream inputStream = DBUtils.class.getClassLoader().getResourceAsStream("db.properties");
-                prop.load(inputStream);
-                String driver = prop.getProperty(profile + ".driver");
-                String url = prop.getProperty(profile + ".url");
-                String user = prop.getProperty(profile + ".user");
-                String password = prop.getProperty(profile + ".password");
-                Class.forName(driver);
-                connection = DriverManager.getConnection(url, user, password);
+                //todo better
+                if (profile == Consts.PROFILE_PRODUCTION) {
+                    connection = getProdConnection();
+                } else {
+                    //get connection
+                    Properties prop = new Properties();
+                    InputStream inputStream = DBUtils.class.getClassLoader().getResourceAsStream("db.properties");
+                    prop.load(inputStream);
+                    String driver = prop.getProperty(profile + ".driver");
+                    String url = prop.getProperty(profile + ".url");
+                    String user = prop.getProperty(profile + ".user");
+                    String password = prop.getProperty(profile + ".password");
+                    Class.forName(driver);
+                    connection = DriverManager.getConnection(url, user, password);
+                }
             } catch (ClassNotFoundException e) {
                 log.error("catch ex:" + e.getMessage());
                 //e.printStackTrace();
@@ -47,10 +57,22 @@ public class DBUtils {
                 log.error("catch ex:" + e.getMessage());
             } catch (IOException e) {
                 log.error("catch ex:" + e.getMessage());
+            } catch (URISyntaxException e) {
+                log.error("catch ex:" + e.getMessage());
             }
             return connection;
         }
 
+    }
+
+    private static Connection getProdConnection() throws URISyntaxException, SQLException {
+        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+        String username = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+
+        return DriverManager.getConnection(dbUrl, username, password);
     }
 
     public static void createTables() throws SQLException {
