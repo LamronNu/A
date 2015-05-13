@@ -92,7 +92,9 @@ public class DBUtils {
                 ")";
         //                "/*ALTER TABLE users ADD CONSTRAINT unique_userid UNIQUE (id);*/\n" +
 
+        log.info("users" + sqlCreate);
         stmt.execute(sqlCreate);
+
         sqlCreate = new String() +
                 /*lots*/
                 "\n" +
@@ -107,6 +109,8 @@ public class DBUtils {
                 "    ownerId int  NOT NULL,\n" +
                 "    state varchar (10) DEFAULT 'Active' NOT NULL\n" +
                 ")\n";
+
+        log.info("lots" + sqlCreate);
         stmt.execute(sqlCreate);
 
         sqlCreate = new String() +
@@ -114,6 +118,8 @@ public class DBUtils {
                 "ALTER TABLE lots ADD CONSTRAINT lots_user\n" +
                 "  FOREIGN KEY (ownerId) REFERENCES users (id);\n" +
                 "\n";
+
+        log.info("lots FK" + sqlCreate);
         stmt.execute(sqlCreate);
 
         sqlCreate = new String() +
@@ -132,6 +138,7 @@ public class DBUtils {
                 "ALTER TABLE bids ADD CONSTRAINT lots_user\n" +
                 "  FOREIGN KEY (lotId) REFERENCES lots (id)";
 
+        log.info("bids" + sqlCreate);
         stmt.execute(sqlCreate);
     }
 }
