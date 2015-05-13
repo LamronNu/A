@@ -81,14 +81,14 @@ public class DBUtils {
 
         String sqlCreate = new String() +
                 /*Users*/
-                "CREATE TABLE IF NOT EXISTS users\n" +
+                "CREATE TABLE IF NOT EXISTS \"users\"\n" +
                 "(\n" +
-                "    id serial PRIMARY KEY ,\n" +
+                "    id serial PRIMARY KEY,\n" +
                 "    createdOn timestamp NOT NULL,\n" +
-                "    Login varchar (50) NOT NULL,\n" +
-                "    password varchar (50) NOT NULL,\n" +
-                "    firstName varchar (50) NOT NULL,\n" +
-                "    lastName varchar (50)\n" +
+                "    Login varchar(50) NOT NULL,\n" +
+                "    password varchar(50) NOT NULL,\n" +
+                "    firstName varchar(50) NOT NULL,\n" +
+                "    lastName varchar(50)\n" +
                 ")";
         //                "/*ALTER TABLE users ADD CONSTRAINT unique_userid UNIQUE (id);*/\n" +
 
@@ -97,17 +97,16 @@ public class DBUtils {
 
         sqlCreate = new String() +
                 /*lots*/
-                "\n" +
-                "CREATE TABLE IF NOT EXISTS lots\n" +
+                "CREATE TABLE IF NOT EXISTS \"lots\"\n" +
                 "(\n" +
-                "    id serial PRIMARY KEY ,\n" +
+                "    id serial PRIMARY KEY,\n" +
                 "    createdOn timestamp NOT NULL,\n" +
                 "    name varchar(100) NOT NULL,\n" +
                 "    finishDate timestamp NOT NULL,\n" +
-                "    startPrice float (15, 2) NOT NULL,\n" +
-                "    description varchar (500),\n" +
+                "    startPrice float(15,2) NOT NULL,\n" +
+                "    description varchar(500),\n" +
                 "    ownerId int  NOT NULL,\n" +
-                "    state varchar (10) DEFAULT 'Active' NOT NULL\n" +
+                "    state varchar(10) DEFAULT \"Active\" NOT NULL\n" +
                 ")\n";
 
         log.info("lots" + sqlCreate);
