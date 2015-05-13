@@ -1,10 +1,12 @@
 package WebService.General;
 
+import WebService.dao.DBUtils;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.sql.SQLException;
 
 @WebListener
 public class StartWebServiceListener implements  ServletContextListener {
@@ -13,6 +15,11 @@ public class StartWebServiceListener implements  ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         //new AuctionPublisher().publish();
+        try {
+            DBUtils.createTables();
+        } catch (SQLException e) {
+            log.error(e);
+        }
     }
 
     @Override
