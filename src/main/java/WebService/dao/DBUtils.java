@@ -57,7 +57,7 @@ public class DBUtils {
         String sqlCreate = new String() +
                 /*Users*/
                 "\n" +
-                "CREATE TABLE users\n" +
+                "CREATE TABLE IF NOT EXISTS users\n" +
                 "(\n" +
                 "    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,\n" +
                 "    createdOn timestamp NOT NULL,\n" +
@@ -69,7 +69,7 @@ public class DBUtils {
 //                "/*ALTER TABLE users ADD CONSTRAINT unique_userid UNIQUE (id);*/\n" +
                 /*lots*/
                 "\n" +
-                "CREATE TABLE lots\n" +
+                "CREATE TABLE IF NOT EXISTS lots\n" +
                 "(\n" +
                 "    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,\n" +
                 "    createdOn timestamp NOT NULL,\n" +
@@ -85,7 +85,7 @@ public class DBUtils {
                 "  FOREIGN KEY (ownerId) REFERENCES users (id);\n" +
                 "\n" +
 //                "/*bids*/\n" +
-                "CREATE TABLE bids\n" +
+                "CREATE TABLE IF NOT EXISTS bids\n" +
                 "(\n" +
                 "    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,\n" +
                 "    lotId int NOT NULL,\n" +

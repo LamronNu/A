@@ -2,9 +2,7 @@ package WebService.General;
 
 import Library.Consts;
 import WebService.dao.DBUtils;
-import WebService.jobs.AuctionSchedule;
 import org.apache.log4j.Logger;
-import org.quartz.SchedulerException;
 
 import javax.xml.ws.Endpoint;
 import java.sql.SQLException;
@@ -25,13 +23,13 @@ public class AuctionPublisher {
         log.info("publish webService: OK");
 
         //scheduler
-        log.info("start AuctionSchedule");
-        try {
-            new AuctionSchedule().startActualizeLotStatesJob();
-        } catch (SchedulerException e) {
-            log.error("Scheduler ex", e);
-        }
-        log.info("end start AuctionSchedule: OK");
+//        log.info("start AuctionSchedule");
+//        try {
+//            new AuctionSchedule().startActualizeLotStatesJob();
+//        } catch (SchedulerException e) {
+//            log.error("Scheduler ex", e);
+//        }
+//        log.info("end start AuctionSchedule: OK");
 
         //db
         log.info("start create tables if not exists");
