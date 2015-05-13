@@ -76,9 +76,11 @@ public class DBUtils {
     }
 
     public static void createTables() throws SQLException {
+
+        Statement stmt = getConnection().createStatement();
+
         String sqlCreate = new String() +
                 /*Users*/
-                "\n" +
                 "CREATE TABLE IF NOT EXISTS users\n" +
                 "(\n" +
                 "    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,\n" +
@@ -87,8 +89,11 @@ public class DBUtils {
                 "    password varchar (50) NOT NULL,\n" +
                 "    firstName varchar (50) NOT NULL,\n" +
                 "    lastName varchar (50)\n" +
-                ");\n" +
-//                "/*ALTER TABLE users ADD CONSTRAINT unique_userid UNIQUE (id);*/\n" +
+                ")";
+        //                "/*ALTER TABLE users ADD CONSTRAINT unique_userid UNIQUE (id);*/\n" +
+
+        stmt.execute(sqlCreate);
+        sqlCreate = new String() +
                 /*lots*/
                 "\n" +
                 "CREATE TABLE IF NOT EXISTS lots\n" +
@@ -101,11 +106,17 @@ public class DBUtils {
                 "    description varchar (500),\n" +
                 "    ownerId int  NOT NULL,\n" +
                 "    state varchar (10) DEFAULT 'Active' NOT NULL\n" +
-                ");\n" +
+                ")\n";
+        stmt.execute(sqlCreate);
+
+        sqlCreate = new String() +
 //                "/*ALTER TABLE lots ADD CONSTRAINT unique_lotid UNIQUE (id);*/\n" +
                 "ALTER TABLE lots ADD CONSTRAINT lots_user\n" +
                 "  FOREIGN KEY (ownerId) REFERENCES users (id);\n" +
-                "\n" +
+                "\n";
+        stmt.execute(sqlCreate);
+
+        sqlCreate = new String() +
 //                "/*bids*/\n" +
                 "CREATE TABLE IF NOT EXISTS bids\n" +
                 "(\n" +
@@ -119,9 +130,8 @@ public class DBUtils {
                 "ALTER TABLE bids ADD CONSTRAINT bids_user\n" +
                 "  FOREIGN KEY (ownerId) REFERENCES users (id);\n" +
                 "ALTER TABLE bids ADD CONSTRAINT lots_user\n" +
-                "  FOREIGN KEY (lotId) REFERENCES lots (id);";
+                "  FOREIGN KEY (lotId) REFERENCES lots (id)";
 
-        Statement stmt = getConnection().createStatement();
         stmt.execute(sqlCreate);
     }
 }
