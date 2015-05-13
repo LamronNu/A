@@ -79,12 +79,13 @@ public class DBUtils {
 
         Statement stmt = getConnection().createStatement();
 
-        String sqlCreate = new String() +
+        String sqlCreate = "" +
                 /*Users*/
+                "DROP TABLE \"users\"" +
                 "CREATE TABLE IF NOT EXISTS \"users\"\n" +
                 "(\n" +
                 "    id serial PRIMARY KEY,\n" +
-                "    createdOn timestamp NOT NULL,\n" +
+                "    createdOn  timestamp DEFAULT current_timestamp NOT NULL,\n" +
                 "    Login varchar(50) NOT NULL,\n" +
                 "    password varchar(50) NOT NULL,\n" +
                 "    firstName varchar(50) NOT NULL,\n" +
@@ -95,14 +96,14 @@ public class DBUtils {
         log.info("users" + sqlCreate);
         stmt.execute(sqlCreate);
 
-        sqlCreate = new String() +
+        sqlCreate = "" +
                 /*lots*/
                 "CREATE TABLE IF NOT EXISTS \"lots\"\n" +
                 "(\n" +
                 "    id serial PRIMARY KEY,\n" +
-                "    createdOn timestamp NOT NULL,\n" +
+                "    createdOn  timestamp DEFAULT current_timestamp NOT NULL,\n" +
                 "    name varchar(100) NOT NULL,\n" +
-                "    finishDate timestamp NOT NULL,\n" +
+                "    finishDate  timestamp DEFAULT current_timestamp NOT NULL,\n" +
                 "    startPrice float(15,2) NOT NULL,\n" +
                 "    description varchar(500),\n" +
                 "    ownerId int  NOT NULL,\n" +
@@ -112,7 +113,7 @@ public class DBUtils {
         log.info("lots" + sqlCreate);
         stmt.execute(sqlCreate);
 
-        sqlCreate = new String() +
+        sqlCreate = "" +
 //                "/*ALTER TABLE lots ADD CONSTRAINT unique_lotid UNIQUE (id);*/\n" +
                 "ALTER TABLE lots ADD CONSTRAINT lots_user\n" +
                 "  FOREIGN KEY (ownerId) REFERENCES users (id);\n" +
@@ -121,7 +122,7 @@ public class DBUtils {
         log.info("lots FK" + sqlCreate);
         stmt.execute(sqlCreate);
 
-        sqlCreate = new String() +
+        sqlCreate = "" +
 //                "/*bids*/\n" +
                 "CREATE TABLE IF NOT EXISTS bids\n" +
                 "(\n" +
@@ -129,7 +130,7 @@ public class DBUtils {
                 "    lotId int NOT NULL,\n" +
                 "    ownerId int NOT NULL,\n" +
                 "    value float (15, 2) NOT NULL,\n" +
-                "    createdOn timestamp  NOT NULL\n" +
+                "    createdOn  timestamp DEFAULT current_timestamp  NOT NULL\n" +
                 ");\n" +
 //                "/*ALTER TABLE bids ADD CONSTRAINT unique_bidid UNIQUE (id);*/\n" +
                 "ALTER TABLE bids ADD CONSTRAINT bids_user\n" +
