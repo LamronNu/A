@@ -81,7 +81,10 @@ public class DBUtils {
 
         String sqlCreate = "" +
                 /*Users*/
-                "DROP TABLE \"users\"" +
+                "DROP TABLE \"users\"";
+        log.info("drop users " + sqlCreate);
+        stmt.execute(sqlCreate);
+        sqlCreate = "" +
                 "CREATE TABLE IF NOT EXISTS \"users\"\n" +
                 "(\n" +
                 "    id serial PRIMARY KEY,\n" +
