@@ -83,7 +83,7 @@ public class DBUtils {
                 /*Users*/
                 "CREATE TABLE IF NOT EXISTS users\n" +
                 "(\n" +
-                "    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,\n" +
+                "    id int serial PRIMARY KEY NOT NULL ,\n" +
                 "    createdOn timestamp NOT NULL,\n" +
                 "    Login varchar (50) NOT NULL,\n" +
                 "    password varchar (50) NOT NULL,\n" +
@@ -98,7 +98,7 @@ public class DBUtils {
                 "\n" +
                 "CREATE TABLE IF NOT EXISTS lots\n" +
                 "(\n" +
-                "    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,\n" +
+                "    id int serial PRIMARY KEY NOT NULL ,\n" +
                 "    createdOn timestamp NOT NULL,\n" +
                 "    name varchar(100) NOT NULL,\n" +
                 "    finishDate timestamp NOT NULL,\n" +
@@ -120,7 +120,7 @@ public class DBUtils {
 //                "/*bids*/\n" +
                 "CREATE TABLE IF NOT EXISTS bids\n" +
                 "(\n" +
-                "    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,\n" +
+                "    id int serial PRIMARY KEY NOT NULL ,\n" +
                 "    lotId int NOT NULL,\n" +
                 "    ownerId int NOT NULL,\n" +
                 "    value float (15, 2) NOT NULL,\n" +

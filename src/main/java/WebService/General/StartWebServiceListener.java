@@ -15,11 +15,13 @@ public class StartWebServiceListener implements  ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         //new AuctionPublisher().publish();
+        log.info("start create tables if not exists");
         try {
             DBUtils.createTables();
         } catch (SQLException e) {
             log.error(e);
         }
+        log.info("create tables: OK");
     }
 
     @Override
