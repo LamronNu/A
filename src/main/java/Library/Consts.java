@@ -42,9 +42,9 @@ public class Consts {
         String profile = env.getProperty("profile");
         profile = profile == null ? PROFILE_DEFAULT : profile;
         if ("prod".equals(profile))
-            return "http://auction-example.herokuapp.com:80/auction";
+            return "http://auction-example.herokuapp.com:80/service";
         else
-            return "http://localhost:8100/services/auction";
+            return "http://localhost:8100/service";
 
 //        switch (profile){
 //            case "dev":
