@@ -3,12 +3,12 @@
          xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-   <!-- <listener>
-        <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
-    </listener>-->
-    <!--<listener>-->
-    <!--<listener-class>WebService.General.StartWebServiceListener</listener-class>-->
+    <!--&lt;!&ndash;&ndash;&gt; <listener>-->
+    <!--<listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>-->
     <!--</listener>-->
+    <listener>
+        <listener-class>WebService.General.StartWebServiceListener</listener-class>
+    </listener>
     <!-- WS-->
     <servlet>
         <description>JAX-WS endpoint</description>
