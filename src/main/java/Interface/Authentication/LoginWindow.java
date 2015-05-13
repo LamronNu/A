@@ -4,6 +4,7 @@ import Interface.BasicWindow;
 import Interface.InformationDialog;
 import Interface.Main.MainWindow;
 import Library.Exceptions.UserDataNotValidException;
+import WebService.General.AuctionPublisher;
 import WebService.General.AuctionWs;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
@@ -17,6 +18,7 @@ public class LoginWindow extends Window implements BasicWindow {
     private final TextField loginField;
     private final Button btnOk;
     private final Button btnRegister;
+    private final Button btnStartWs;
 
     private int userId;
     private PasswordField passwordField;
@@ -66,10 +68,22 @@ public class LoginWindow extends Window implements BasicWindow {
 
         registerPanel.addComponent(btnRegister);
         registerPanel.setComponentAlignment(btnRegister, Alignment.BOTTOM_RIGHT);
+        //start ws (temp, todo better)
+        VerticalLayout startWsPanel = new VerticalLayout();
+        btnStartWs = new Button("Start WS", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                new AuctionPublisher().publish();
+            }
+        });
+        btnStartWs.setStyleName(BaseTheme.BUTTON_LINK);
+        startWsPanel.addComponent(btnStartWs);
+        content.addComponent(startWsPanel);
         //total
         content.addComponent(fieldsPanel);
         content.addComponent(okPanel);
         content.addComponent(registerPanel);
+
         //other windows
 //        VerticalLayout windowsPanel = new VerticalLayout();
 //        Button btnNewLot = new Button("New Lot",new Button.ClickListener() {
