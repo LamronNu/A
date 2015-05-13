@@ -30,12 +30,12 @@ public class AuctionPublisher {
 //        log.info("end start AuctionSchedule: OK");
 
         //db
-//        log.info("start create tables if not exists");
-//        try {
-//            DBUtils.createTables();
-//        } catch (SQLException e) {
-//            log.error("SQL ex", e);
-//        }
-//        log.info("create tables: OK");
+        log.info("start create tables if not exists");
+        try {
+            DBUtils.createTables();
+        } catch (SQLException e) {
+            log.error("SQL ex", e);
+        }
+        log.info("create tables: OK");
     }
 }
