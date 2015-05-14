@@ -1,6 +1,7 @@
 # Auction
 
-This project realizes primitive auction system, that provide:
+This project realizes primitive auction system, that provides:
+
 + register of user
 + login user to the system (only authorized users can work with it)
 + user can:
