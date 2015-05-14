@@ -1,7 +1,7 @@
 package ws.model;
 
 import org.apache.log4j.Logger;
-import ws.dao.temp.UserDao;
+import ws.dao.UserDao;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

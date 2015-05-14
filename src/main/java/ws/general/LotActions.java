@@ -3,7 +3,7 @@ package ws.general;
 import org.apache.log4j.Logger;
 import util.Consts;
 import util.ex.LotUpdateException;
-import ws.dao.temp.LotDao;
+import ws.dao.LotDao;
 import ws.model.Lot;
 
 import java.util.Date;

@@ -3,7 +3,7 @@ package ws.general;
 import org.apache.log4j.Logger;
 import util.ex.LoginIsAlreadyExistsException;
 import util.ex.UserDataNotValidException;
-import ws.dao.temp.UserDao;
+import ws.dao.UserDao;
 import ws.model.User;
 
 /**
