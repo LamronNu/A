@@ -1,0 +1,37 @@
+CREATE TABLE IF NOT EXISTS users
+                (
+                id serial PRIMARY KEY,
+                createdOn  timestamp DEFAULT current_timestamp NOT NULL,
+                login varchar(50) UNIQUE  NOT NULL,
+                password varchar(50) NOT NULL,
+                firstName varchar(50) NOT NULL,
+                lastName varchar(50)
+                );
+
+CREATE TABLE IF NOT EXISTS lots
+                (
+                id serial PRIMARY KEY,
+                createdOn  timestamp DEFAULT current_timestamp NOT NULL,
+                name varchar(100) NOT NULL,
+                finishDate  timestamp DEFAULT current_timestamp NOT NULL,
+                startPrice float(2) NOT NULL,
+                description varchar(500),
+                ownerId int  NOT NULL,
+                state varchar(10) DEFAULT 'Active' NOT NULL
+                )
+                ;
+ALTER TABLE lots ADD CONSTRAINT lots_user
+                FOREIGN KEY (ownerId) REFERENCES users (id);
+
+CREATE TABLE IF NOT EXISTS bids
+                (
+                id  serial PRIMARY KEY ,
+                lotId int NOT NULL,
+                ownerId int NOT NULL,
+                value float (2) NOT NULL,
+                createdOn  timestamp DEFAULT current_timestamp  NOT NULL
+                );
+ALTER TABLE bids ADD CONSTRAINT bids_user
+                FOREIGN KEY (ownerId) REFERENCES users (id);
+ALTER TABLE bids ADD CONSTRAINT lots_user
+                FOREIGN KEY (lotId) REFERENCES lots (id);

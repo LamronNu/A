@@ -20,7 +20,7 @@ public class DBUtils {
     private static final Logger log = Logger.getLogger(DBUtils.class);
     private static Connection connection = null;
 
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() {
         if (connection != null)
             return connection;
         else {
@@ -56,6 +56,8 @@ public class DBUtils {
             } catch (URISyntaxException e) {
                 log.error("catch ex:" + e.getMessage());
                 //e.printStackTrace();
+            } catch (SQLException e) {
+                log.error("catch ex:" + e.getMessage());
             }
             return connection;
         }
