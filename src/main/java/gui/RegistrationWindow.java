@@ -138,8 +138,9 @@ class RegistrationWindow extends Window implements BasicWindow {
     @Override
     public void onNotify(String message) {
         if (resultType == "Success") {
-            MainWindow wnd = new MainWindow(this.parentWindow, newUserId);
-            getCurrent().addWindow(wnd);
+            //todo check code -- getUset return null
+//            MainWindow wnd = new MainWindow(this.parentWindow, newUserId);
+//            getCurrent().addWindow(wnd);
             this.close();//??
         }
         resultType = "";

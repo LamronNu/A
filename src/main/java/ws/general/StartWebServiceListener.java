@@ -1,7 +1,9 @@
 package ws.general;
 
 import org.apache.log4j.Logger;
+import org.quartz.SchedulerException;
 import ws.dao.DaoUtils;
+import ws.jobs.AuctionSchedule;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -15,6 +17,17 @@ public class StartWebServiceListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         //new AuctionPublisher().publish();
+//scheduler
+        log.info("start AuctionSchedule");
+        try {
+            new AuctionSchedule().startActualizeLotStatesJob();
+        } catch (SchedulerException e) {
+            log.error("Scheduler ex", e);
+        }
+        log.info("end start AuctionSchedule: OK");
+
+
+        //db
         log.info("start create tables if not exists");
         try {
             DaoUtils.createTables();
