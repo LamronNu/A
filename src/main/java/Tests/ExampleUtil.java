@@ -26,6 +26,22 @@ public final class ExampleUtil {
             + "Quisque ornare erat rhoncus lectus. Donec vitae ante at enim mollis egestas. Mauris convallis. Fusce convallis, nisl eu sagittis suscipit, risus ligula aliquam libero, in imperdiet neque mi non risus. Aenean dictum ultricies risus. Praesent ut ligula vitae purus ornare auctor. Cras tellus mauris, adipiscing ac, dignissim auctor, faucibus in, sem. Cras mauris libero, pharetra sit amet, lacinia eu, vehicula eleifend, sapien. Donec ac tellus. Sed eros dui, vulputate vel, auctor pharetra, tincidunt at, ipsum. Duis at dolor ac leo condimentum pulvinar. Donec molestie, dolor et fringilla elementum, nibh nibh iaculis orci, eu elementum odio turpis et odio. Phasellus fermentum, justo id placerat egestas, arcu nunc molestie ante, non imperdiet ligula lectus sed erat. Quisque sed ligula. Sed ac nulla. Nullam massa. "
             + "<br/>"
             + "Sed a purus. Mauris non nibh blandit neque cursus scelerisque. Quisque ultrices sem nec dolor. Donec non diam ut dui consequat venenatis. Nullam risus massa, egestas in, facilisis tristique, molestie sed, mi. Duis euismod turpis sit amet quam. Vestibulum ornare felis eget dolor. Phasellus ac urna vel sapien lacinia adipiscing. Donec egestas felis id mi. Sed erat. Vestibulum porta vulputate neque. Maecenas scelerisque, sem id sodales pretium, sem mauris rhoncus magna, at scelerisque tortor mauris nec dui. Nullam blandit rhoncus velit. Nam accumsan, enim id vestibulum feugiat, lorem nibh placerat urna, eget laoreet diam tortor at lorem. Suspendisse imperdiet consectetur dolor. ";
+    public static final Object iso3166_PROPERTY_NAME = "name";
+    public static final Object iso3166_PROPERTY_SHORT = "short";
+    public static final Object iso3166_PROPERTY_FLAG = "flag";
+    public static final Object hw_PROPERTY_NAME = "name";
+    public static final Object hw_PROPERTY_ICON = "icon";
+    public static final Object locale_PROPERTY_LOCALE = "locale";
+    public static final Object locale_PROPERTY_NAME = "name";
+    public static final Object timezone_PROPERTY_TIME_ZONE = "timeZone";
+    public static final Object timezone_PROPERTY_NAME = "name";
+    public static final Object PERSON_PROPERTY_FIRSTNAME = "First Name";
+    public static final Object PERSON_PROPERTY_LASTNAME = "Last Name";
+    public static final Object PERSON_PROPERTY_NAME = "Name";
+    public static final Object ORDER_DESCRIPTION_PROPERTY_ID = "description";
+    public static final Object ORDER_QUANTITY_PROPERTY_ID = "quantity";
+    public static final Object ORDER_UNITPRICE_PROPERTY_ID = "unitprice";
+    public static final Object ORDER_ITEMPRICE_PROPERTY_ID = "itemprice";
     private static final String[] iso3166 = new String[] { "AFGHANISTAN", "AF",
             "ÅLAND ISLANDS", "AX", "ALBANIA", "AL", "ALGERIA", "DZ",
             "AMERICAN SAMOA", "AS", "ANDORRA", "AD", "ANGOLA", "AO",
@@ -112,14 +128,6 @@ public final class ExampleUtil {
             "VN", "VIRGIN ISLANDS, BRITISH", "VG", "VIRGIN ISLANDS, U.S.",
             "VI", "WALLIS AND FUTUNA", "WF", "WESTERN SAHARA", "EH", "YEMEN",
             "YE", "ZAMBIA", "ZM", "ZIMBABWE", "ZW" };
-    public static final Object iso3166_PROPERTY_NAME = "name";
-    public static final Object iso3166_PROPERTY_SHORT = "short";
-    public static final Object iso3166_PROPERTY_FLAG = "flag";
-    public static final Object hw_PROPERTY_NAME = "name";
-    public static final Object hw_PROPERTY_ICON = "icon";
-
-    public static final Object locale_PROPERTY_LOCALE = "locale";
-    public static final Object locale_PROPERTY_NAME = "name";
     private static final String[][] locales = { { "fi", "FI", "Finnish" },
             { "de", "DE", "German" }, { "en", "US", "US - English" },
             { "sv", "SE", "Swedish" } };
@@ -129,15 +137,8 @@ public final class ExampleUtil {
             { "Monitors", "Benq T190HD", "Benq T220HD", "Benq T240HD" },
             { "Laptops", "IBM ThinkPad T40", "IBM ThinkPad T43",
                     "IBM ThinkPad T60" } };
-
-    public static final Object timezone_PROPERTY_TIME_ZONE = "timeZone";
-    public static final Object timezone_PROPERTY_NAME = "name";
     private static final String[] timezones = { "UTC", "Europe/Helsinki",
             "Australia/Melbourne", "America/New_York" };
-
-    public static final Object PERSON_PROPERTY_FIRSTNAME = "First Name";
-    public static final Object PERSON_PROPERTY_LASTNAME = "Last Name";
-    public static final Object PERSON_PROPERTY_NAME = "Name";
     private static final String[] firstnames = new String[] { "John", "Mary",
             "Joe", "Sarah", "Jeff", "Jane", "Peter", "Marc", "Robert", "Paula",
             "Lenny", "Kenny", "Nathan", "Nicole", "Laura", "Jos", "Josie",
@@ -146,11 +147,6 @@ public final class ExampleUtil {
             "Smith", "Adams", "Black", "Wilson", "Richards", "Thompson",
             "McGoff", "Halas", "Jones", "Beck", "Sheridan", "Picard", "Hill",
             "Fielding", "Einstein" };
-
-    public static final Object ORDER_DESCRIPTION_PROPERTY_ID = "description";
-    public static final Object ORDER_QUANTITY_PROPERTY_ID = "quantity";
-    public static final Object ORDER_UNITPRICE_PROPERTY_ID = "unitprice";
-    public static final Object ORDER_ITEMPRICE_PROPERTY_ID = "itemprice";
 
     public static IndexedContainer getPersonContainer() {
         IndexedContainer contactContainer = new IndexedContainer();

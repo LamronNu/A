@@ -1,10 +1,10 @@
-package WebService.jobs;
+package ws.jobs;
 
-import WebService.General.LotActions;
 import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import ws.general.LotActions;
 
 public class ActualizeLotStatesJob implements Job {
     private static final Logger log = Logger.getLogger(ActualizeLotStatesJob.class);

@@ -1,15 +1,15 @@
-package Interface.Authentication;
+package gui.authentication;
 
-import Interface.BasicWindow;
-import Interface.InformationDialog;
-import Interface.Main.MainWindow;
-import Library.Exceptions.LoginIsAlreadyExistsException;
-import WebService.General.AuctionWs;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
+import gui.BasicWindow;
+import gui.InformationDialog;
+import gui.main.MainWindow;
+import library.exceptions.LoginIsAlreadyExistsException;
 import org.apache.log4j.Logger;
+import ws.general.AuctionWs;
 
 class RegistrationWindow extends Window implements BasicWindow {
     private static final Logger log = Logger.getLogger(RegistrationWindow.class);
@@ -80,7 +80,7 @@ class RegistrationWindow extends Window implements BasicWindow {
         buttonsPanel.addComponent(btnOk);
         buttonsPanel.setComponentAlignment(btnOk, Alignment.MIDDLE_LEFT);
         //cancel
-        btnCancel = new Button("Cancel",new Button.ClickListener() {
+        btnCancel = new Button("Cancel", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 onCancel();
@@ -93,7 +93,7 @@ class RegistrationWindow extends Window implements BasicWindow {
         content.addComponent(buttonsPanel);
     }
 
-   private void onCancel() {
+    private void onCancel() {
         this.close();
     }
 
@@ -119,16 +119,16 @@ class RegistrationWindow extends Window implements BasicWindow {
         String message = "";
         try {
             AuctionWs auction = Authentication.getAuctionWebService();
-            this.newUserId = auction.createNewUser(lgn,pwd,fName,lName);
+            this.newUserId = auction.createNewUser(lgn, pwd, fName, lName);
             message = "user [" + lgn + "] is registered!";
             this.resultType = "Success";
 
-        } catch (LoginIsAlreadyExistsException /*| MalformedURLException*/ e){
+        } catch (LoginIsAlreadyExistsException /*| MalformedURLException*/ e) {
             message = "user [" + lgn
                     + "] is not registered (cause: " + e.getMessage() + ")";
             this.resultType = "Failure";
-           // Dialog dialog = new InformationDialog(this, message, false);
-        } catch (Exception e){
+            // Dialog dialog = new InformationDialog(this, message, false);
+        } catch (Exception e) {
             message = e.getMessage();
             log.error(message);
         }

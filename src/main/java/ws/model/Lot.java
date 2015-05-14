@@ -1,4 +1,4 @@
-package WebService.entity;
+package ws.model;
 
 import org.joda.time.*;
 
@@ -6,28 +6,40 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
+/**
+ * describe entity Lot
+ */
 @Entity
 @Table(name = "lots")
 public class Lot {
 
-    //private User owner;
-    //    ownerId int  NOT NULL,
-//    state varchar (10) DEFAULT 'Active' NOT NULL
-//fields
+    //lot states
+    public static final String ACTIVE = "Active";
+    public static final String CANCELLED = "Cancelled";
+    public static final String SOLD = "Sold";
+    public static final String NOT_SOLD = "Not sold";
+
+    //fields
     @Id
     @Column(name = "id")
     @GeneratedValue
     private int id;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "finishDate")
     private Date finishDate = new Date();
+
     @Column(name = "startPrice")
     private double startPrice = 1.;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "ownerId")
     private int ownerId;
+
     @Column(name = "state")
     private String state;
 
@@ -46,13 +58,7 @@ public class Lot {
 
     }
     public Lot(String name, Date finishDate, double startPrice, String description, int ownerId) {
-        this.name = name;
-        this.finishDate = finishDate;
-        this.startPrice = startPrice;
-        this.description = description;
-        this.ownerId = ownerId;
-        this.state = "Active";
-       // owner = new UserDAO().getUserById(ownerId);
+        this(name, finishDate, startPrice, description, ownerId, ACTIVE);
     }
     public Lot(String name, Date finishDate, double startPrice, String description, int ownerId, String state) {
         this.name = name;
@@ -61,7 +67,7 @@ public class Lot {
         this.description = description;
         this.ownerId = ownerId;
         this.state = state;
-        //owner = new UserDAO().getUserById(ownerId);
+        //owner = new UserDao().getUserById(ownerId);
     }
 
     //setters-getters
@@ -80,17 +86,21 @@ public class Lot {
     public void setName(String name) {
         this.name = name;
     }
-//finish date
+
+    //finish date
     public Date getFinishDate() {
         return finishDate;
     }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
+
     public Timestamp getSqlFinishDate() {
         Timestamp result = new Timestamp(finishDate.getTime());
         return result;
     }
-    public void setFinishDate(Date finishDate) {
-        this.finishDate = finishDate;
-    }
+
     public void setFinishDateFromSql(Timestamp finishDate) {
         this.finishDate = new Date(finishDate.getTime());
 
@@ -117,7 +127,7 @@ public class Lot {
 
     public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
-        //owner = new UserDAO().getUserById(ownerId);
+        //owner = new UserDao().getUserById(ownerId);
     }
 
     public String getState() {
@@ -131,6 +141,10 @@ public class Lot {
     //
     public String getOwnerName(){
         return ownerName;//owner.getFullName();
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     public String getRemainingTime(){
@@ -154,24 +168,20 @@ public class Lot {
                 ", description='" + description + '\'' +
                 ", ownerId=" + ownerId +
                 ", state='" + state + '\'' +
-                ", OwnerName=" + this.getOwnerName() +
-                ", RemainingTime='" + this.getRemainingTime() + '\'' +
+                ", ownerName=" + this.getOwnerName() +
+                ", remainingTime='" + this.getRemainingTime() + '\'' +
                 '}';
-    }
-
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
-
-    public void setMaxBidValue(double maxBidValue) {
-        this.maxBidValue = maxBidValue;
     }
 
     public double getTotalLotPrice() {
         return (maxBidValue == 0) ? startPrice : maxBidValue;
     }
+
     public double getMaxBidValue() {
         return maxBidValue;
+    }
+
+    public void setMaxBidValue(double maxBidValue) {
+        this.maxBidValue = maxBidValue;
     }
 }

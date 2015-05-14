@@ -1,4 +1,4 @@
-package WebService.jobs;
+package ws.jobs;
 
 import org.apache.log4j.Logger;
 import org.quartz.*;

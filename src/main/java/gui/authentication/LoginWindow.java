@@ -1,15 +1,14 @@
-package Interface.Authentication;
+package gui.authentication;
 
-import Interface.BasicWindow;
-import Interface.InformationDialog;
-import Interface.Main.MainWindow;
-import Library.Exceptions.UserDataNotValidException;
-import WebService.General.AuctionPublisher;
-import WebService.General.AuctionWs;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.BaseTheme;
+import gui.BasicWindow;
+import gui.InformationDialog;
+import gui.main.MainWindow;
+import library.exceptions.UserDataNotValidException;
 import org.apache.log4j.Logger;
+import ws.general.AuctionWs;
 
 public class LoginWindow extends Window implements BasicWindow {
     private static final Logger log = Logger.getLogger(LoginWindow.class);
@@ -18,7 +17,7 @@ public class LoginWindow extends Window implements BasicWindow {
     private final TextField loginField;
     private final Button btnOk;
     private final Button btnRegister;
-    private final Button btnStartWs;
+//    private final Button btnStartWs;
 
     private int userId;
     private PasswordField passwordField;
@@ -52,13 +51,14 @@ public class LoginWindow extends Window implements BasicWindow {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 onOk();
-            }});
+            }
+        });
         btnOk.setClickShortcut(ShortcutAction.KeyCode.ENTER); //enter
         okPanel.addComponent(btnOk);
         okPanel.setComponentAlignment(btnOk, Alignment.MIDDLE_CENTER);
         //register
         VerticalLayout registerPanel = new VerticalLayout();
-        btnRegister = new Button("Register",new Button.ClickListener() {
+        btnRegister = new Button("Register", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 onRegister();
@@ -68,17 +68,17 @@ public class LoginWindow extends Window implements BasicWindow {
 
         registerPanel.addComponent(btnRegister);
         registerPanel.setComponentAlignment(btnRegister, Alignment.BOTTOM_RIGHT);
-        //start ws (temp, todo better)
-        VerticalLayout startWsPanel = new VerticalLayout();
-        btnStartWs = new Button("Start WS", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                new AuctionPublisher().publish();
-            }
-        });
-        btnStartWs.setStyleName(BaseTheme.BUTTON_LINK);
-        startWsPanel.addComponent(btnStartWs);
-        content.addComponent(startWsPanel);
+//        //info todo
+//        VerticalLayout startWsPanel = new VerticalLayout();
+//        btnStartWs = new Button("Info", new Button.ClickListener() {
+//            @Override
+//            public void buttonClick(Button.ClickEvent clickEvent) {
+//
+//            }
+//        });
+//        btnStartWs.setStyleName(BaseTheme.BUTTON_LINK);
+//        startWsPanel.addComponent(btnStartWs);
+//        content.addComponent(startWsPanel);
         //total
         content.addComponent(fieldsPanel);
         content.addComponent(okPanel);
@@ -116,13 +116,13 @@ public class LoginWindow extends Window implements BasicWindow {
     }
 
     private void onMain() {
-        MainWindow wnd = new MainWindow(this.parentWindow,userId);
+        MainWindow wnd = new MainWindow(this.parentWindow, userId);
         getCurrent().addWindow(wnd);
 
     }
 
 //    private void onNewBid() {
-//        NewBidWindow wnd = new NewBidWindow();
+//        BidWindow wnd = new BidWindow();
 //        getCurrent().addWindow(wnd);
 //    }
 //
@@ -141,21 +141,21 @@ public class LoginWindow extends Window implements BasicWindow {
         String lgn = loginField.getValue();
         String pwd = passwordField.getValue();//Arrays.toString().toString();
         String message = "Enter user data!";
-        if (lgn != "" && pwd != ""){ //todo better?
+        if (lgn != "" && pwd != "") { //todo better?
             try {
                 AuctionWs auction = Authentication.getAuctionWebService();
                 userId = auction.authenticateUser(lgn, pwd);
                 message = "Welcome, " + lgn + "!";
                 this.resultType = "Success";
-                log.info("user ["+ lgn + "] is login");
+                log.info("user [" + lgn + "] is login");
             } catch (UserDataNotValidException e) {
                 message = e.getMessage();
                 this.resultType = "Failure";
-                log.error("Catch Exception, user ["+ lgn + "]: " + message);
-            } catch (Exception e){
+                log.error("Catch Exception, user [" + lgn + "]: " + message);
+            } catch (Exception e) {
                 message = e.getMessage();
                 this.resultType = "Failure";
-                log.error("Catch Exception: ",e);
+                log.error("Catch Exception: ", e);
             }
         } else {
             log.info(message);
@@ -166,7 +166,7 @@ public class LoginWindow extends Window implements BasicWindow {
     }
 
     @Override
-    public void onNotify(String message){
+    public void onNotify(String message) {
         if (resultType == "Success") {
 
             log.info("close login window");
