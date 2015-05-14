@@ -1,7 +1,7 @@
 package ws.general;
 
 import org.apache.log4j.Logger;
-import ws.dao.BidDao;
+import ws.dao.temp.BidDao;
 import ws.model.Bid;
 
 import java.util.List;
