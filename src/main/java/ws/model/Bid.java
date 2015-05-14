@@ -1,7 +1,7 @@
-package WebService.entity;
+package ws.model;
 
 import org.apache.log4j.Logger;
-import ws.dao.UserDAO;
+import ws.dao.temp.UserDao;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -43,7 +43,7 @@ public class Bid {
         this.value = value;
         this.lotId = lotId;
         this.ownerId = ownerId;
-        owner = new UserDAO().getUserByLotId(lotId);
+        owner = new UserDao().getUserByLotId(lotId);
     }
 
     public Bid() {
@@ -73,7 +73,7 @@ public class Bid {
 
     public void setLotId(int lotId) {
         this.lotId = lotId;
-        owner = new UserDAO().getUserByLotId(lotId);
+        owner = new UserDao().getUserByLotId(lotId);
     }
 
     public int getOwnerId() {

@@ -1,11 +1,11 @@
-package WebService.General;
+package ws.general;
 
-import WebService.entity.Bid;
-import WebService.entity.Lot;
 import util.Consts;
 import util.ex.LoginIsAlreadyExistsException;
 import util.ex.LotUpdateException;
 import util.ex.UserDataNotValidException;
+import ws.model.Bid;
+import ws.model.Lot;
 
 import javax.jws.WebService;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
         portName = "AuctionPort",
         serviceName = "AuctionService",
         targetNamespace = Consts.TARGET_NAMESPACE,
-        endpointInterface = "WebService.General.AuctionWs")
+        endpointInterface = "ws.general.AuctionWs")
 public class Auction implements AuctionWs {
 
     private final UserActions userActions;

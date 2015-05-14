@@ -16,8 +16,8 @@ import java.util.Properties;
 /**
  * Created by Olga on 22.09.2014.
  */
-public class DBUtils {
-    private static final Logger log = Logger.getLogger(DBUtils.class);
+public class DaoUtils {
+    private static final Logger log = Logger.getLogger(DaoUtils.class);
     private static Connection connection = null;
 
     public static Connection getConnection() {
@@ -38,7 +38,7 @@ public class DBUtils {
                 } else {
                     //get connection
                     Properties prop = new Properties();
-                    InputStream inputStream = DBUtils.class.getClassLoader().getResourceAsStream("db.properties");
+                    InputStream inputStream = DaoUtils.class.getClassLoader().getResourceAsStream("db.properties");
                     prop.load(inputStream);
                     String driver = prop.getProperty(profile + ".driver");
                     String url = prop.getProperty(profile + ".url");

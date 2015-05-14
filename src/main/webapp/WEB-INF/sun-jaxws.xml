@@ -4,10 +4,10 @@
 
     <endpoint
             name='AuctionService'
-            implementation='WebService.General.Auction'
+            implementation='ws.general.Auction'
             url-pattern='/service'/>
     <!--portName = "AuctionPort",
     serviceName = "AuctionService",
     targetNamespace = "http://www.jbs.com.ua/wsdl",
-    endpointInterface = "WebService.General.AuctionWs-->
+    endpointInterface = "ws.general.AuctionWs-->
 </endpoints>

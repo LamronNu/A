@@ -1,8 +1,8 @@
-package WebService.General;
+package ws.general;
 
 import org.apache.log4j.Logger;
 import util.Consts;
-import ws.dao.DBUtils;
+import ws.dao.DaoUtils;
 
 import javax.xml.ws.Endpoint;
 import java.sql.SQLException;
@@ -35,7 +35,7 @@ public class AuctionPublisher {
         //db
         log.info("start create tables if not exists");
         try {
-            DBUtils.createTables();
+            DaoUtils.createTables();
         } catch (SQLException e) {
             log.error("SQL ex", e);
         }

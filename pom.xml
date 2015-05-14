@@ -192,7 +192,7 @@
             <!--<assembleDirectory>target</assembleDirectory>-->
             <!--<programs>-->
             <!--<program>-->
-            <!--<mainClass>WebService.General.AuctionPublisher</mainClass>-->
+            <!--<mainClass>ws.general.AuctionPublisher</mainClass>-->
             <!--<name>app</name>-->
             <!--</program>-->
             <!--</programs>-->

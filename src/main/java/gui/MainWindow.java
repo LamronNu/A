@@ -1,8 +1,5 @@
 package gui;
 
-import WebService.General.AuctionWs;
-import WebService.entity.Bid;
-import WebService.entity.Lot;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.Property;
 import com.vaadin.shared.ui.MarginInfo;
@@ -12,6 +9,9 @@ import com.vaadin.ui.themes.BaseTheme;
 import org.apache.log4j.Logger;
 import util.Consts;
 import util.ex.LotUpdateException;
+import ws.general.AuctionWs;
+import ws.model.Bid;
+import ws.model.Lot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

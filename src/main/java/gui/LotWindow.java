@@ -1,7 +1,5 @@
 package gui;
 
-import WebService.General.AuctionWs;
-import WebService.entity.Lot;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.validator.DateRangeValidator;
@@ -12,6 +10,8 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
 import util.Consts;
+import ws.general.AuctionWs;
+import ws.model.Lot;
 
 import java.util.Date;
 

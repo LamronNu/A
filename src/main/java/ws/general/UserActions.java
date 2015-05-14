@@ -1,21 +1,21 @@
-package WebService.General;
+package ws.general;
 
-import WebService.entity.User;
 import org.apache.log4j.Logger;
 import util.ex.LoginIsAlreadyExistsException;
 import util.ex.UserDataNotValidException;
-import ws.dao.UserDAO;
+import ws.dao.temp.UserDao;
+import ws.model.User;
 
 /**
  * Created by Olga on 28.09.2014.
  */
 public class UserActions {
     private static final Logger log = Logger.getLogger(UserActions.class);
-    private final UserDAO userDAO;
+    private final UserDao userDao;
     private User user;
 
     public UserActions() {
-        this.userDAO = new UserDAO();
+        this.userDao = new UserDao();
     }
 
 
@@ -36,12 +36,12 @@ public class UserActions {
     }
 
     private boolean CheckIsLoginExistsInDB(String userLogin) {
-        return userLogin.equals(this.userDAO.getUserByLogin(userLogin).getLogin());
+        return userLogin.equals(this.userDao.getUserByLogin(userLogin).getLogin());
     }
 
     private void SaveUserToDB() {
         log.info("try save new user to dao");
-        this.userDAO.addUser(this.user);
+        this.userDao.addUser(this.user);
         log.info("success.");
     }
 
@@ -54,12 +54,12 @@ public class UserActions {
             throw new UserDataNotValidException();
         }
         log.info("user is successfy authenticate");
-        return this.userDAO.getUserByLogin(userLogin).getId();
+        return this.userDao.getUserByLogin(userLogin).getId();
     }
 
     private boolean CheckIsLoginAndPasswordAreCorrect(String login, String password) {
         log.info("check login-password");
-        User dbUser = this.userDAO.getUserByLogin(login);
+        User dbUser = this.userDao.getUserByLogin(login);
         boolean IsPasswordCorrect = password.equals(dbUser.getPassword());
         if (IsPasswordCorrect) {
             log.info("password is correct");
@@ -70,7 +70,7 @@ public class UserActions {
     }
 
     public String GetUserName(int userID) {
-        return this.userDAO.getUserById(userID).getFullName();
+        return this.userDao.getUserById(userID).getFullName();
     }
 
 //    public User GetFromDB(String Lgn, String pwd) {

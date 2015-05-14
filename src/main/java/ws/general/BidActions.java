@@ -1,8 +1,8 @@
-package WebService.General;
+package ws.general;
 
-import WebService.entity.Bid;
 import org.apache.log4j.Logger;
 import ws.dao.BidDao;
+import ws.model.Bid;
 
 import java.util.List;
 

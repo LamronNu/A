@@ -1,7 +1,7 @@
-package WebService.General;
+package ws.general;
 
 import org.apache.log4j.Logger;
-import ws.dao.DBUtils;
+import ws.dao.DaoUtils;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -17,7 +17,7 @@ public class StartWebServiceListener implements ServletContextListener {
         //new AuctionPublisher().publish();
         log.info("start create tables if not exists");
         try {
-            DBUtils.createTables();
+            DaoUtils.createTables();
         } catch (SQLException e) {
             log.error(e);
         }

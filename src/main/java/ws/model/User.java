@@ -1,4 +1,4 @@
-package WebService.entity;
+package ws.model;
 
 
 import javax.persistence.*;

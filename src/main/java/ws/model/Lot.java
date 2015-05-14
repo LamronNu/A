@@ -1,4 +1,4 @@
-package WebService.entity;
+package ws.model;
 
 import org.joda.time.*;
 
@@ -52,7 +52,7 @@ public class Lot {
         this.description = description;
         this.ownerId = ownerId;
         this.state = "Active";
-        // owner = new UserDAO().getUserById(ownerId);
+        // owner = new UserDao().getUserById(ownerId);
     }
     public Lot(String name, Date finishDate, double startPrice, String description, int ownerId, String state) {
         this.name = name;
@@ -61,7 +61,7 @@ public class Lot {
         this.description = description;
         this.ownerId = ownerId;
         this.state = state;
-        //owner = new UserDAO().getUserById(ownerId);
+        //owner = new UserDao().getUserById(ownerId);
     }
 
     //setters-getters
@@ -121,7 +121,7 @@ public class Lot {
 
     public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
-        //owner = new UserDAO().getUserById(ownerId);
+        //owner = new UserDao().getUserById(ownerId);
     }
 
     public String getState() {

@@ -1,11 +1,11 @@
 package gui;
 
-import WebService.General.AuctionWs;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.BaseTheme;
 import org.apache.log4j.Logger;
 import util.ex.UserDataNotValidException;
+import ws.general.AuctionWs;
 
 public class LoginWindow extends Window implements BasicWindow {
     private static final Logger log = Logger.getLogger(LoginWindow.class);

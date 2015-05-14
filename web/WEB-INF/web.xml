@@ -7,7 +7,7 @@
     <!--<listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>-->
     <!--</listener>-->
     <listener>
-        <listener-class>WebService.General.StartWebServiceListener</listener-class>
+        <listener-class>ws.general.StartWebServiceListener</listener-class>
     </listener>
     <!-- WS-->
     <servlet>

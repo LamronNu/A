@@ -1,12 +1,12 @@
 package gui;
 
-import WebService.General.AuctionWs;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
 import util.ex.LoginIsAlreadyExistsException;
+import ws.general.AuctionWs;
 
 class RegistrationWindow extends Window implements BasicWindow {
     private static final Logger log = Logger.getLogger(RegistrationWindow.class);
