@@ -19,14 +19,6 @@ import java.util.Set;
 
 @SuppressWarnings("serial")
 public class TableMainFeaturesExample extends VerticalLayout {
-    public static void main(String[] args) {
-        new TableMainFeaturesExample();
-    }
-    private static final Logger log = Logger.getLogger(TableMainFeaturesExample.class);
-    Table table = new Table("ISO-3166 Country Codes and flags");
-
-    HashSet<Object> markedRows = new HashSet<Object>();
-
     static final Action ACTION_MARK = new Action("Mark");
     static final Action ACTION_UNMARK = new Action("Unmark");
     static final Action ACTION_LOG = new Action("Save");
@@ -34,7 +26,9 @@ public class TableMainFeaturesExample extends VerticalLayout {
             ACTION_LOG };
     static final Action[] ACTIONS_MARKED = new Action[] { ACTION_UNMARK,
             ACTION_LOG };
-
+    private static final Logger log = Logger.getLogger(TableMainFeaturesExample.class);
+    Table table = new Table("ISO-3166 Country Codes and flags");
+    HashSet<Object> markedRows = new HashSet<Object>();
     public TableMainFeaturesExample() {
         addComponent(table);
 
@@ -158,5 +152,9 @@ public class TableMainFeaturesExample extends VerticalLayout {
             }
         });
 
+    }
+
+    public static void main(String[] args) {
+        new TableMainFeaturesExample();
     }
 }
