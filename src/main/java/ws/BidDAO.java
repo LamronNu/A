@@ -1,6 +1,7 @@
-package ws.dao;
+package ws;
 
 import org.apache.log4j.Logger;
+import ws.dao.DaoUtils;
 import ws.model.Bid;
 
 import java.sql.Connection;
