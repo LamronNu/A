@@ -1,7 +1,6 @@
-package ws;
+package ws.dao;
 
 import org.apache.log4j.Logger;
-import ws.dao.DaoUtils;
 import ws.model.Bid;
 
 import java.sql.Connection;
@@ -11,14 +10,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BidDao {
+public class BidDAO {
 
 
-    private static final Logger log = Logger.getLogger(BidDao.class);
+    private static final Logger log = Logger.getLogger(BidDAO.class);
 
     private final Connection connection;
 
-    public BidDao() {
+    public BidDAO() {
         connection = DaoUtils.getConnection();
     }
 
@@ -35,6 +34,7 @@ public class BidDao {
                     " join lots as L on L.id = B.lotId " +
                     " join users as O on O.id = B.ownerId " +
                     " where lotId = ?";
+
             PreparedStatement preparedStatement = connection.
                     prepareStatement(sqlQuery);
             preparedStatement.setInt(1, lotId);
