@@ -47,7 +47,13 @@ public class DBUtils {
                     Class.forName(driver);
                     connection = DriverManager.getConnection(url, user, password);
                 }
-            } catch (ClassNotFoundException | IOException | URISyntaxException e) {
+            } catch (ClassNotFoundException e) {
+                log.error("catch ex:" + e.getMessage());
+                //e.printStackTrace();
+            } catch (IOException e) {
+                log.error("catch ex:" + e.getMessage());
+                //e.printStackTrace();
+            } catch (URISyntaxException e) {
                 log.error("catch ex:" + e.getMessage());
                 //e.printStackTrace();
             }
