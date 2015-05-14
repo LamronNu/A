@@ -1,7 +1,7 @@
 package WebService.dao;
 
-import Library.Consts;
 import org.apache.log4j.Logger;
+import util.Consts;
 
 import java.io.IOException;
 import java.io.InputStream;

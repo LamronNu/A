@@ -1,8 +1,8 @@
 package WebService.General;
 
-import Library.Consts;
 import WebService.dao.DBUtils;
 import org.apache.log4j.Logger;
+import util.Consts;
 
 import javax.xml.ws.Endpoint;
 import java.sql.SQLException;

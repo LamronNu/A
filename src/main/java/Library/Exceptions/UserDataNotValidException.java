@@ -1,7 +1,7 @@
 package Library.Exceptions;
 
 
-import Library.Consts;
+import util.Consts;
 
 /**
  * Created by Olga on 22.09.2014.

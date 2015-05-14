@@ -2,10 +2,10 @@ package Interface;
 
 import Interface.Main.LotWindow;
 import Interface.Main.NewBidWindow;
-import Library.Consts;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
+import util.Consts;
 
 public class InformationDialog extends Window {
     private static final Logger log = Logger.getLogger(InformationDialog.class);
