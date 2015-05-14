@@ -1,11 +1,11 @@
-package ws.model;
+package WebService.entity;
+
 
 import javax.persistence.*;
 
 /**
- * describe model of app-users
+ * Created by Olga on 22.09.2014.
  */
-
 @Entity
 @Table(name = "users")
 public class User {
@@ -23,13 +23,21 @@ public class User {
     @Column(name = "lastName")
     private String lastName;
 
-    //constructor
+    //constructors
+    //by fields
     public User(String login, String password, String firstName, String lastName) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName == null ? "" : lastName;
     }
+    //by userCard
+//    public User(UserCard Card) {
+//        this.login = Card.getLogin();
+//        this.password = Card.getPassword();
+//        this.firstName = Card.getFirstName();
+//        this.lastName =  Card.getLastName();
+//    }
 
     public User() {
 
@@ -106,6 +114,8 @@ public class User {
     }
 
     public String getFullName(){
-        return firstName + " " + (lastName == null ? "" : (" " + lastName));
+        return firstName + " " + lastName;
     }
+
+
 }

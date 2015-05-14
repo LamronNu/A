@@ -1,4 +1,4 @@
-package gui;
+package Interface;
 
 import com.vaadin.ui.UI;
 

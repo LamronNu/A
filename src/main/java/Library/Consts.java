@@ -6,7 +6,11 @@ import java.util.Properties;
  * Created by Olga on 22.09.2014.
  */
 public class Consts {
-
+    //lot states
+    public static final String ACTIVE_LOT_STATE = "Active";
+    public static final String CANCELLED_LOT_STATE = "Cancelled";
+    public static final String SOLD_LOT_STATE = "Sold";
+    public static final String NOT_SOLD_LOT_STATE = "Not sold";
     //webService consts
     public static final String WEB_SERVICE_URL = getWebServiceUrl();
     public static final String TARGET_NAMESPACE = "http://www.auction-example.herokuapp.com/wsdl";
@@ -14,12 +18,6 @@ public class Consts {
     //user consts
     public static final String LOGIN_IS_ALREADY_EXISTS_MESSAGE = "USER_LOGIN_IS_ALREADY_EXISTS";
     public static final String USER_DATA_NOT_VALID_MESSAGE = "USER_DATA_NOT_VALID";
-
-    //lot states
-    public static final String ACTIVE_LOT_STATE = "Active";
-    public static final String CANCELLED_LOT_STATE = "Cancelled";
-    public static final String SOLD_LOT_STATE = "Sold";
-    public static final String NOT_SOLD_LOT_STATE = "Not sold";
 
     //notify messages
     public static final String REFRESH_LOTS_MESSAGE = "RefreshLots";

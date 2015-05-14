@@ -7,7 +7,6 @@ import Library.Consts;
  */
 public class LoginIsAlreadyExistsException extends AuctionException {
 
-
     public LoginIsAlreadyExistsException(String login) {
         super(Consts.LOGIN_IS_ALREADY_EXISTS_MESSAGE + ": " + login);
     }

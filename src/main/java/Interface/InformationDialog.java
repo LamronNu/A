@@ -1,10 +1,10 @@
-package gui;
+package Interface;
 
+import Interface.Main.LotWindow;
+import Interface.Main.NewBidWindow;
+import Library.Consts;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
-import gui.main.BidWindow;
-import gui.main.LotWindow;
-import library.Consts;
 import org.apache.log4j.Logger;
 
 public class InformationDialog extends Window {
@@ -63,7 +63,7 @@ public class InformationDialog extends Window {
     private void onOk() {
         if (notifyWindow.getClass() == LotWindow.class){
             notifyMessage = Consts.REFRESH_LOTS_MESSAGE;
-        } else if (notifyWindow.getClass() == BidWindow.class) {
+        } else if (notifyWindow.getClass() == NewBidWindow.class) {
             notifyMessage = Consts.REFRESH_BIDS_MESSAGE;
         }
         notifyWindow.onNotify(notifyMessage);

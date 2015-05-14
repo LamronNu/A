@@ -1,10 +1,10 @@
-package gui.authentication;
+package Interface.Authentication;
 
+import Library.Consts;
+import WebService.General.AuctionWs;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
-import library.Consts;
 import org.apache.log4j.Logger;
-import ws.general.AuctionWs;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;

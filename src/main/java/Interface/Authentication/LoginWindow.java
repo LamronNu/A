@@ -1,14 +1,14 @@
-package gui.authentication;
+package Interface.Authentication;
 
+import Interface.BasicWindow;
+import Interface.InformationDialog;
+import Interface.Main.MainWindow;
+import Library.Exceptions.UserDataNotValidException;
+import WebService.General.AuctionWs;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.BaseTheme;
-import gui.BasicWindow;
-import gui.InformationDialog;
-import gui.main.MainWindow;
-import library.exceptions.UserDataNotValidException;
 import org.apache.log4j.Logger;
-import ws.general.AuctionWs;
 
 public class LoginWindow extends Window implements BasicWindow {
     private static final Logger log = Logger.getLogger(LoginWindow.class);
@@ -68,12 +68,12 @@ public class LoginWindow extends Window implements BasicWindow {
 
         registerPanel.addComponent(btnRegister);
         registerPanel.setComponentAlignment(btnRegister, Alignment.BOTTOM_RIGHT);
-//        //info todo
+//        //start ws (temp, todo better)
 //        VerticalLayout startWsPanel = new VerticalLayout();
-//        btnStartWs = new Button("Info", new Button.ClickListener() {
+//        btnStartWs = new Button("Start WS", new Button.ClickListener() {
 //            @Override
 //            public void buttonClick(Button.ClickEvent clickEvent) {
-//
+//                new AuctionPublisher().publish();
 //            }
 //        });
 //        btnStartWs.setStyleName(BaseTheme.BUTTON_LINK);
@@ -122,7 +122,7 @@ public class LoginWindow extends Window implements BasicWindow {
     }
 
 //    private void onNewBid() {
-//        BidWindow wnd = new BidWindow();
+//        NewBidWindow wnd = new NewBidWindow();
 //        getCurrent().addWindow(wnd);
 //    }
 //

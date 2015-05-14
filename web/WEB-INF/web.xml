@@ -7,7 +7,7 @@
     <!--<listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>-->
     <!--</listener>-->
     <listener>
-        <listener-class>ws.general.StartWebServiceListener</listener-class>
+        <listener-class>WebService.General.StartWebServiceListener</listener-class>
     </listener>
     <!-- WS-->
     <servlet>
@@ -28,7 +28,7 @@
         <servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
         <init-param>
             <param-name>UI</param-name>
-            <param-value>gui.authentication.Authentication</param-value>
+            <param-value>Interface.Authentication.Authentication</param-value>
         </init-param>
         <async-supported>true</async-supported><!---->
     </servlet>

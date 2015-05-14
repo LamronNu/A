@@ -1,11 +1,11 @@
-package Interface.Main;
+package Interface.Main;//package gui.main;
 
 import Interface.Authentication.Authentication;
 import Interface.BasicWindow;
 import Interface.InformationDialog;
 import Library.Consts;
-import WebService.entity.Lot;
 import WebService.General.AuctionWs;
+import WebService.entity.Lot;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.converter.StringToDoubleConverter;
@@ -15,7 +15,8 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
 
-public class NewBidWindow extends Window  implements BasicWindow {
+
+public class NewBidWindow extends Window implements BasicWindow {
     private static final Logger log = Logger.getLogger(NewBidWindow.class);
     private final Label dollarLabel;
     private final Button btnOk;
@@ -49,14 +50,14 @@ public class NewBidWindow extends Window  implements BasicWindow {
         bidValueField.setConverter(new StringToDoubleConverter());
         bidValueField.addValidator(new DoubleRangeValidator(
                 "The min bid must be " + minBidValue + "$ (was {0}$)",
-                         minBidValue, Double.MAX_VALUE));//validation
+                minBidValue, Double.MAX_VALUE));//validation
         bidValueField.setImmediate(true);
 
         bidValueField.setWidth("100%");
         fieldsPanel.addComponent(bidValueField);
         //dollar label
         HorizontalLayout dollarPanel = new HorizontalLayout();
-        dollarPanel.setMargin(new MarginInfo(false,true,false,false));
+        dollarPanel.setMargin(new MarginInfo(false, true, false, false));
         dollarLabel = new Label("$   ");
         dollarLabel.setWidth("100%");
         //startPriceField.setWidth("100%");
@@ -85,11 +86,9 @@ public class NewBidWindow extends Window  implements BasicWindow {
         content.addComponent(buttonsPanel);
 
 
-
-
     }
 
-   private void onCancel() {
+    private void onCancel() {
         this.close();
     }
 
@@ -116,7 +115,7 @@ public class NewBidWindow extends Window  implements BasicWindow {
             }
             resultType = IsCreated ? "Success" : "Failure";
 
-        } catch (Exception e){
+        } catch (Exception e) {
             message = e.getMessage();
             log.error(message);
         }

@@ -1,7 +1,7 @@
 package Tests;
 
 
-import ws.general.AuctionPublisher;
+import WebService.General.AuctionPublisher;
 
 public class TestUserRegistration {
     public static void main(String[] args) {
