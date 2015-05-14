@@ -1,4 +1,4 @@
-package gui.Main;//package gui.main;
+package gui;//package gui.main;
 
 import WebService.General.AuctionWs;
 import WebService.entity.Lot;
@@ -9,9 +9,6 @@ import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
-import gui.Authentication.Authentication;
-import gui.BasicWindow;
-import gui.InformationDialog;
 import org.apache.log4j.Logger;
 import util.Consts;
 

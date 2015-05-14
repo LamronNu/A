@@ -1,4 +1,4 @@
-package Library.Exceptions;
+package util.ex;
 
 
 public class LotUpdateException extends AuctionException {

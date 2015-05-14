@@ -1,11 +1,11 @@
 package WebService.General;
 
-import Library.Exceptions.LoginIsAlreadyExistsException;
-import Library.Exceptions.LotUpdateException;
-import Library.Exceptions.UserDataNotValidException;
 import WebService.entity.Bid;
 import WebService.entity.Lot;
 import util.Consts;
+import util.ex.LoginIsAlreadyExistsException;
+import util.ex.LotUpdateException;
+import util.ex.UserDataNotValidException;
 
 import javax.jws.WebService;
 import java.util.List;

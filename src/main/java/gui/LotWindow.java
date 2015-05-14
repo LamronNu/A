@@ -1,4 +1,4 @@
-package gui.Main;
+package gui;
 
 import WebService.General.AuctionWs;
 import WebService.entity.Lot;
@@ -10,9 +10,6 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
-import gui.Authentication.Authentication;
-import gui.BasicWindow;
-import gui.InformationDialog;
 import org.apache.log4j.Logger;
 import util.Consts;
 

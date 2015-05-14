@@ -1,10 +1,10 @@
 package WebService.General;
 
-import Library.Exceptions.LoginIsAlreadyExistsException;
-import Library.Exceptions.UserDataNotValidException;
 import WebService.dao.UserDAO;
 import WebService.entity.User;
 import org.apache.log4j.Logger;
+import util.ex.LoginIsAlreadyExistsException;
+import util.ex.UserDataNotValidException;
 
 /**
  * Created by Olga on 28.09.2014.

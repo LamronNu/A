@@ -1,4 +1,4 @@
-package gui.Authentication;
+package gui;
 
 import WebService.General.AuctionWs;
 import com.vaadin.server.VaadinRequest;

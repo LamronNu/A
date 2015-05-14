@@ -1,4 +1,4 @@
-package Library.Exceptions;
+package util.ex;
 
 /**
  * Created by Olga on 22.09.2014.

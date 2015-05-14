@@ -1,4 +1,4 @@
-package Library.Exceptions;
+package util.ex;
 
 
 import util.Consts;

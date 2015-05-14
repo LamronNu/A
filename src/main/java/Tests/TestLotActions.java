@@ -1,11 +1,11 @@
 package Tests;
 
-import Library.Exceptions.LoginIsAlreadyExistsException;
-import Library.Exceptions.UserDataNotValidException;
 import WebService.General.Auction;
 import WebService.General.AuctionWs;
 import WebService.entity.Lot;
 import org.apache.log4j.Logger;
+import util.ex.LoginIsAlreadyExistsException;
+import util.ex.UserDataNotValidException;
 
 import java.util.ArrayList;
 import java.util.Date;

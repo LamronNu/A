@@ -1,6 +1,5 @@
-package gui.Main;
+package gui;
 
-import Library.Exceptions.LotUpdateException;
 import WebService.General.AuctionWs;
 import WebService.entity.Bid;
 import WebService.entity.Lot;
@@ -10,12 +9,9 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.BaseTheme;
-import gui.Authentication.Authentication;
-import gui.Authentication.LoginWindow;
-import gui.BasicWindow;
-import gui.InformationDialog;
 import org.apache.log4j.Logger;
 import util.Consts;
+import util.ex.LotUpdateException;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
