@@ -1,7 +1,7 @@
 package WebService.General;
 
-import WebService.dao.DBUtils;
 import org.apache.log4j.Logger;
+import ws.dao.DBUtils;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

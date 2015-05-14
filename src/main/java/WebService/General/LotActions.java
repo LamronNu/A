@@ -1,10 +1,10 @@
 package WebService.General;
 
-import WebService.dao.LotDAO;
 import WebService.entity.Lot;
 import org.apache.log4j.Logger;
 import util.Consts;
 import util.ex.LotUpdateException;
+import ws.dao.LotDAO;
 
 import java.util.Date;
 import java.util.List;

@@ -1,4 +1,4 @@
-package WebService.dao;
+package ws.dao;
 
 import WebService.entity.Lot;
 import org.apache.log4j.Logger;

@@ -1,7 +1,7 @@
 package WebService.entity;
 
-import WebService.dao.UserDAO;
 import org.apache.log4j.Logger;
+import ws.dao.UserDAO;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
