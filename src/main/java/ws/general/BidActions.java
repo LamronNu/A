@@ -1,8 +1,8 @@
 package ws.general;
 
 import org.apache.log4j.Logger;
+import ws.dao.BidDao;
 import ws.model.Bid;
-import ws.model.BidDao;
 
 import java.util.List;
 
