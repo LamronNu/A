@@ -1,9 +1,9 @@
-package Interface;
+package gui;
 
-import Interface.Main.LotWindow;
-import Interface.Main.NewBidWindow;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
+import gui.Main.LotWindow;
+import gui.Main.NewBidWindow;
 import org.apache.log4j.Logger;
 import util.Consts;
 

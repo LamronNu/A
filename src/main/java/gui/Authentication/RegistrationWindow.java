@@ -1,14 +1,14 @@
-package Interface.Authentication;
+package gui.Authentication;
 
-import Interface.BasicWindow;
-import Interface.InformationDialog;
-import Interface.Main.MainWindow;
 import Library.Exceptions.LoginIsAlreadyExistsException;
 import WebService.General.AuctionWs;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
+import gui.BasicWindow;
+import gui.InformationDialog;
+import gui.Main.MainWindow;
 import org.apache.log4j.Logger;
 
 class RegistrationWindow extends Window implements BasicWindow {

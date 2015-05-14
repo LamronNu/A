@@ -1,9 +1,5 @@
-package Interface.Main;
+package gui.Main;
 
-import Interface.Authentication.Authentication;
-import Interface.Authentication.LoginWindow;
-import Interface.BasicWindow;
-import Interface.InformationDialog;
 import Library.Exceptions.LotUpdateException;
 import WebService.General.AuctionWs;
 import WebService.entity.Bid;
@@ -14,6 +10,10 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.BaseTheme;
+import gui.Authentication.Authentication;
+import gui.Authentication.LoginWindow;
+import gui.BasicWindow;
+import gui.InformationDialog;
 import org.apache.log4j.Logger;
 import util.Consts;
 

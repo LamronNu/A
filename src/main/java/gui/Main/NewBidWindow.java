@@ -1,8 +1,5 @@
-package Interface.Main;//package gui.main;
+package gui.Main;//package gui.main;
 
-import Interface.Authentication.Authentication;
-import Interface.BasicWindow;
-import Interface.InformationDialog;
 import WebService.General.AuctionWs;
 import WebService.entity.Lot;
 import com.vaadin.data.Validator;
@@ -12,6 +9,9 @@ import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
+import gui.Authentication.Authentication;
+import gui.BasicWindow;
+import gui.InformationDialog;
 import org.apache.log4j.Logger;
 import util.Consts;
 
