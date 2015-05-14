@@ -1,7 +1,6 @@
-package ws;
+package ws.dao;
 
 import org.apache.log4j.Logger;
-import ws.dao.DaoUtils;
 import ws.model.Bid;
 
 import java.sql.Connection;
@@ -11,14 +10,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BidDAO {
-
-
-    private static final Logger log = Logger.getLogger(BidDAO.class);
+public class BidDao {
+    private static final Logger log = Logger.getLogger(BidDao.class);
 
     private final Connection connection;
 
-    public BidDAO() {
+    public BidDao() {
         connection = DaoUtils.getConnection();
     }
 
