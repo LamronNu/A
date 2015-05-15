@@ -23,6 +23,7 @@ public class User {
     @Column(name = "lastName")
     private String lastName;
 
+
     //constructor
     public User(String login, String password, String firstName, String lastName) {
         this.login = login;
