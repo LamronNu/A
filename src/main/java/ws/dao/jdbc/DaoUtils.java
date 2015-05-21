@@ -1,4 +1,4 @@
-package ws.dao;
+package ws.dao.jdbc;
 
 import org.apache.log4j.Logger;
 import util.Consts;

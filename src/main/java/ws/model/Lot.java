@@ -5,37 +5,58 @@ import org.joda.time.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "lots")
 public class Lot {
 
-    //private User owner;
-    //    ownerId int  NOT NULL,
-//    state varchar (10) DEFAULT 'Active' NOT NULL
-//fields
+    //lot states
+    public static final String ACTIVE = "Active";
+    public static final String CANCELLED = "Cancelled";
+    public static final String SOLD = "Sold";
+    public static final String NOT_SOLD = "Not sold";
+
+    //fields
     @Id
-    @Column(name = "id")
+    @Column
     @GeneratedValue
     private int id;
-    @Column(name = "name")
+
+    @Column
     private String name;
-    @Column(name = "finishDate")
-    private Date finishDate = new Date();
-    @Column(name = "startPrice")
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date finishDate;
+
+    @Column
     private double startPrice = 1.;
-    @Column(name = "description")
+
+    @Column
     private String description;
-    @Column(name = "ownerId")
-    private int ownerId;
-    @Column(name = "state")
+
+    @Column
     private String state;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ownerId")
+    private User owner;
+
+    @OneToMany(mappedBy = "lot", cascade = CascadeType.ALL)
+    private List<Bid> bids;
+
+    //    @JoinColumn
+    @Transient
+    private double maxBidValue;//??
+
+//    @Column(name = "ownerId")
+//    private int ownerId;
+//@JoinColumn
+//private String ownerName;
+
     //
-    @JoinColumn
-    private String ownerName;
-    @JoinColumn
-    private double maxBidValue;
+
 
     //constructors
     public Lot() {
@@ -45,13 +66,14 @@ public class Lot {
     public Lot(int id) {
 
     }
-    public Lot(String name, Date finishDate, double startPrice, String description, int ownerId) {
+
+    public Lot(String name, Date finishDate, double startPrice, String description) {
         this.name = name;
         this.finishDate = finishDate;
         this.startPrice = startPrice;
         this.description = description;
-        this.ownerId = ownerId;
-        this.state = "Active";
+//        this.ownerId = ownerId;
+        this.state = ACTIVE;
         // owner = new UserDao().getUserById(ownerId);
     }
     public Lot(String name, Date finishDate, double startPrice, String description, int ownerId, String state) {
@@ -59,12 +81,30 @@ public class Lot {
         this.finishDate = finishDate;
         this.startPrice = startPrice;
         this.description = description;
-        this.ownerId = ownerId;
+//        this.ownerId = ownerId;
         this.state = state;
         //owner = new UserDao().getUserById(ownerId);
     }
 
     //setters-getters
+
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
+
     public int getId() {
         return id;
     }
@@ -114,15 +154,7 @@ public class Lot {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public int getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
-        //owner = new UserDao().getUserById(ownerId);
-    }
+//
 
     public String getState() {
         return state;
@@ -132,14 +164,14 @@ public class Lot {
         this.state = state;
     }
 
-    //
-    public String getOwnerName(){
-        return ownerName;//owner.getFullName();
-    }
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
+//    //
+//    public String getOwnerName(){
+//        return ownerName;//owner.getFullName();
+//    }
+//
+//    public void setOwnerName(String ownerName) {
+//        this.ownerName = ownerName;
+//    }
 
     public String getRemainingTime(){
         DateTime today = new DateTime();
@@ -160,9 +192,8 @@ public class Lot {
                 ", finishDate=" + finishDate +
                 ", startPrice=" + startPrice +
                 ", description='" + description + '\'' +
-                ", ownerId=" + ownerId +
                 ", state='" + state + '\'' +
-                ", OwnerName=" + this.getOwnerName() +
+//                ", OwnerName=" + this.getOwnerName() +
                 ", RemainingTime='" + this.getRemainingTime() + '\'' +
                 '}';
     }

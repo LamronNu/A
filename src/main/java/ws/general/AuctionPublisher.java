@@ -1,11 +1,12 @@
 package ws.general;
 
 import org.apache.log4j.Logger;
+import org.quartz.SchedulerException;
 import util.Consts;
-import ws.dao.DaoUtils;
+import ws.general.web.Auction;
+import ws.jobs.AuctionSchedule;
 
 import javax.xml.ws.Endpoint;
-import java.sql.SQLException;
 
 public class AuctionPublisher {
     private static final Logger log = Logger.getLogger(AuctionPublisher.class);//LogManager.getRootLogger();
@@ -24,21 +25,21 @@ public class AuctionPublisher {
         log.info("publish webService: OK");
 
         //scheduler
-//        log.info("start AuctionSchedule");
-//        try {
-//            new AuctionSchedule().startActualizeLotStatesJob();
-//        } catch (SchedulerException e) {
-//            log.error("Scheduler ex", e);
-//        }
-//        log.info("end start AuctionSchedule: OK");
-
-        //db
-        log.info("start create tables if not exists");
+        log.info("start AuctionSchedule");
         try {
-            DaoUtils.createTables();
-        } catch (SQLException e) {
-            log.error("SQL ex", e);
+            new AuctionSchedule().startActualizeLotStatesJob();
+        } catch (SchedulerException e) {
+            log.error("Scheduler ex", e);
         }
-        log.info("create tables: OK");
+        log.info("end start AuctionSchedule: OK");
+
+        //db todo
+//        log.info("start create tables if not exists");
+//        try {
+//            DaoUtils.createTables();
+//        } catch (SQLException e) {
+//            log.error("SQL ex", e);
+//        }
+//        log.info("create tables: OK");
     }
 }

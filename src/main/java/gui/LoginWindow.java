@@ -5,7 +5,8 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.BaseTheme;
 import org.apache.log4j.Logger;
 import util.ex.UserDataNotValidException;
-import ws.general.AuctionWs;
+import ws.general.web.AuctionWebService;
+import ws.model.User;
 
 public class LoginWindow extends Window implements BasicWindow {
     private static final Logger log = Logger.getLogger(LoginWindow.class);
@@ -16,7 +17,7 @@ public class LoginWindow extends Window implements BasicWindow {
     private final Button btnRegister;
 //    private final Button btnStartWs;
 
-    private int userId;
+    private User user;
     private PasswordField passwordField;
     private String resultType = "";
 
@@ -113,7 +114,7 @@ public class LoginWindow extends Window implements BasicWindow {
     }
 
     private void onMain() {
-        MainWindow wnd = new MainWindow(this.parentWindow, userId);
+        MainWindow wnd = new MainWindow(this.parentWindow, user);
         getCurrent().addWindow(wnd);
 
     }
@@ -140,8 +141,8 @@ public class LoginWindow extends Window implements BasicWindow {
         String message = "Enter user data!";
         if (lgn != "" && pwd != "") { //todo better?
             try {
-                AuctionWs auction = Authentication.getAuctionWebService();
-                userId = auction.authenticateUser(lgn, pwd);
+                AuctionWebService auction = Authentication.getAuctionWebService();
+                user = auction.authenticateUser(lgn, pwd);
                 message = "Welcome, " + lgn + "!";
                 this.resultType = "Success";
                 log.info("user [" + lgn + "] is login");

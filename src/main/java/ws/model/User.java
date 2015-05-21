@@ -1,26 +1,28 @@
 package ws.model;
 
-
 import javax.persistence.*;
+import java.util.List;
 
-/**
- * Created by Olga on 22.09.2014.
- */
 @Entity
 @Table(name = "users")
 public class User {
+
+    @OneToMany(mappedBy = "owner")
+    List<Lot> lots;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    List<Bid> bids;
     //fields
     @Id
-    @Column(name = "id")
+    @Column
     @GeneratedValue
     private int id;
-    @Column(name = "login")
+    @Column
     private String login;
-    @Column(name = "password")
+    @Column
     private String password;
-    @Column(name = "firstName")
+    @Column
     private String firstName;
-    @Column(name = "lastName")
+    @Column
     private String lastName;
 
     //constructors
@@ -43,12 +45,24 @@ public class User {
 
     }
 
-    public User(int ownerId) {
-
-    }
-
     //setters and getters
 
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
+
+    public List<Lot> getLots() {
+        return lots;
+    }
+
+    public void setLots(List<Lot> lots) {
+        this.lots = lots;
+    }
     public int getId() {
         return id;
     }

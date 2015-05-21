@@ -10,15 +10,16 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
 import util.Consts;
-import ws.general.AuctionWs;
+import ws.general.web.AuctionWebService;
 import ws.model.Lot;
+import ws.model.User;
 
 import java.util.Date;
 
 public class LotWindow extends Window implements BasicWindow {
     private static final Logger log = Logger.getLogger(LotWindow.class);
     private final BasicWindow parentWindow;
-    private final int ownerId;
+    private final User owner;
     private final boolean IsNewLot;
     private final Lot lot;
     //private final AuctionWs auction;
@@ -30,12 +31,12 @@ public class LotWindow extends Window implements BasicWindow {
     private Button btnCancel;
     private String resultType;
 
-    public LotWindow(BasicWindow components, int ownerId, Lot lot) {
+    public LotWindow(BasicWindow components, User owner, Lot lot) {
         super("New lot"); // Set window caption
         center();
         //
         this.parentWindow = components;
-        this.ownerId = ownerId;
+        this.owner = owner;
         IsNewLot = lot == null;
         this.lot = IsNewLot ? new Lot() : lot;
         //
@@ -141,10 +142,10 @@ public class LotWindow extends Window implements BasicWindow {
         lot.setFinishDate(finishDate);
         lot.setStartPrice(startPrice);
         lot.setDescription(description);
-        lot.setOwnerId(ownerId);
+        lot.setOwner(owner);
         String message = "";
         try {
-            AuctionWs auction = Authentication.getAuctionWebService();
+            AuctionWebService auction = Authentication.getAuctionWebService();
             boolean IsSuccess = IsNewLot ? auction.createNewLot(lot)//lotName, finishDate, startPrice, description, ownerId)
                     : auction.updateLot(lot);
             //this.newUserId = auction.CreateNewUser(lgn,pwd,fName,lName);

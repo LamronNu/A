@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="auction">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+        <class>ws.model.User</class>
+        <class>ws.model.Lot</class>
+        <class>ws.model.Bid</class>
+
+        <properties>
+            <property name="eclipselink.jdbc.url" value="${db.connectionURL}"/>
+            <property name="eclipselink.jdbc.driver" value="${db.driverClass}"/>
+            <property name="eclipselink.jdbc.user" value="${db.username}"/>
+            <property name="eclipselink.jdbc.password" value="${db.password}"/>
+
+            <!--<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />-->
+            <!--<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/auction" />-->
+            <!--<property name="javax.persistence.jdbc.user" value="auctionadmin" />-->
+            <!--<property name="javax.persistence.jdbc.password" value="123123" />-->
+            <!---->
+            <property name="eclipselink.ddl-generation" value="${db.ddl-generation}"/>
+            <property name="eclipselink.ddl-generation.output-mode" value="${db.output-mode}"/>
+
+        </properties>
+    </persistence-unit>
+</persistence>

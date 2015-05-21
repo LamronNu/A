@@ -4,8 +4,9 @@
 
     <endpoint
             name='AuctionService'
-            implementation='ws.general.Auction'
-            url-pattern='/service'/>
+            implementation='ws.general.web.Auction'
+            url-pattern='/service'
+            />
     <!--portName = "AuctionPort",
     serviceName = "AuctionService",
     targetNamespace = "http://www.jbs.com.ua/wsdl",

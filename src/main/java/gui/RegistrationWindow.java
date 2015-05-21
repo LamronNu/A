@@ -6,7 +6,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
 import util.ex.LoginIsAlreadyExistsException;
-import ws.general.AuctionWs;
+import ws.general.web.AuctionWebService;
 
 class RegistrationWindow extends Window implements BasicWindow {
     private static final Logger log = Logger.getLogger(RegistrationWindow.class);
@@ -115,7 +115,7 @@ class RegistrationWindow extends Window implements BasicWindow {
         String lName = lastNameField.getValue();
         String message = "";
         try {
-            AuctionWs auction = Authentication.getAuctionWebService();
+            AuctionWebService auction = Authentication.getAuctionWebService();
             this.newUserId = auction.createNewUser(lgn, pwd, fName, lName);
             message = "user [" + lgn + "] is registered!";
             this.resultType = "Success";

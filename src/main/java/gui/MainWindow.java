@@ -9,9 +9,10 @@ import com.vaadin.ui.themes.BaseTheme;
 import org.apache.log4j.Logger;
 import util.Consts;
 import util.ex.LotUpdateException;
-import ws.general.AuctionWs;
+import ws.general.web.AuctionWebService;
 import ws.model.Bid;
 import ws.model.Lot;
+import ws.model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class MainWindow extends Window implements BasicWindow {
     private static final Logger log = Logger.getLogger(MainWindow.class);
     public final UI parentWindow;
     private final String SPACES_STRING = "&nbsp;&nbsp;&nbsp;&nbsp;";
-    private final AuctionWs auction;
+    private final AuctionWebService auction;
     private final String userName;
     private final Table lotsTable = new Table();
     private final Button btnAddNewBid;
@@ -34,7 +35,7 @@ public class MainWindow extends Window implements BasicWindow {
     private HorizontalLayout lotDetailsLayout;
     private VerticalLayout bidsFrame;
     private VerticalLayout lotsFrame;
-    private int userId;
+    private User user;
     private String resultType;
     private List<Lot> lots;
     private Lot currentLot;
@@ -53,15 +54,15 @@ public class MainWindow extends Window implements BasicWindow {
     private Button editLotButton;
     //private float remainingTimeLabelSize;
 
-    public MainWindow(UI components, int userId) {
+    public MainWindow(UI components, User user) {
         super("Auction"); // Set window caption
         log.info("Start Main window");
         center();
         //init auction variables
         parentWindow = components;
         auction = Authentication.getAuctionWebService();
-        this.userId = userId;
-        userName = auction.getUserName(userId);
+        this.user = user;
+        userName = user.getFullName();// auction.getUserName(userId);
         dateFormat = new SimpleDateFormat(Consts.DATE_FORMAT);
         // Create form
         VerticalLayout content = new VerticalLayout();
@@ -310,17 +311,18 @@ public class MainWindow extends Window implements BasicWindow {
     private void editLot() {
         log.info("try to edit lot: " + (IsSelectedLot ? currentLot.getName() : Consts.PLEASE_SELECT_LOT_MESSAGE));
         if (!IsSelectedLot) return;
-        if (!Consts.ACTIVE_LOT_STATE.equals(currentLot.getState())) {
+        if (!Lot.ACTIVE.equals(currentLot.getState())) {
             showInformation("Can`t edit lot: lot is not in active state!");
             log.warn("Can`t edit lot: lot is not in active state");
             return;
         }
-        if (currentLot.getOwnerId() != userId) {
-            showInformation("Can`t edit lot: you is not lot owner!");
-            log.warn("Can`t edit lot: current user is not lot owner");
-            return;
-        }
-        LotWindow wnd = new LotWindow(this, userId, currentLot);
+        //todo
+//        if (currentLot.getOwnerId() != userId) {
+//            showInformation("Can`t edit lot: you is not lot owner!");
+//            log.warn("Can`t edit lot: current user is not lot owner");
+//            return;
+//        }
+        LotWindow wnd = new LotWindow(this, user, currentLot);
         getCurrent().addWindow(wnd);
     }
 
@@ -347,7 +349,7 @@ public class MainWindow extends Window implements BasicWindow {
             int i = 0;
             for (Bid bid : bids) {
                 bidsTable.addItem(
-                        new Object[]{bid.getValue(), bid.getCreatedOnDate(), bid.getOwnerName()
+                        new Object[]{bid.getValue(), bid.getCreatedOnDate(), bid.getOwner().getFullName()
                                 //, bid.getLotStartPrice(), bid.getLotMaxBidValue()
                         }, i++);
                 // lotsTable.setStyleName(lot.getOwnerId() == userId ? "another" : "normal");
@@ -377,7 +379,7 @@ public class MainWindow extends Window implements BasicWindow {
         valueLabel = new Label(IsSelectedLot ? dateFormat.format(currentLot.getFinishDate()) : Consts.EMPTY_STR);
         lotDetailsValuesPanel.addComponent(valueLabel);
 //owner
-        valueLabel = new Label(IsSelectedLot ? currentLot.getOwnerName() : Consts.EMPTY_STR);
+        valueLabel = new Label(IsSelectedLot ? currentLot.getOwner().getFullName() : Consts.EMPTY_STR);
         lotDetailsValuesPanel.addComponent(valueLabel);
 //remaining time
         valueLabel = new Label(IsSelectedLot ? currentLot.getRemainingTime() : Consts.EMPTY_STR);
@@ -504,8 +506,8 @@ public class MainWindow extends Window implements BasicWindow {
         int i = 0;
         for (Lot lot : lots) {
             //if (!fullRefresh) {
-            isCurrentUserLotOwner = lot.getOwnerId() == userId;
-            isLotActive = Consts.ACTIVE_LOT_STATE.equals(lot.getState());
+            isCurrentUserLotOwner = user.equals(lot.getOwner());//lot.getOwner().getId() == user.getId();//todo better
+            isLotActive = Lot.ACTIVE.equals(lot.getState());
             if (hideNonActiveLots) {
                 if (!isLotActive) continue;
             }
@@ -528,8 +530,8 @@ public class MainWindow extends Window implements BasicWindow {
     private void updateButtonEnabled() {
         boolean isEnabled;
         String description;
-        boolean currentUserIsLotOwner = currentLot.getOwnerId() == userId;
-        boolean lotIsActive = Consts.ACTIVE_LOT_STATE.equals(currentLot.getState());
+        boolean currentUserIsLotOwner = user.equals(currentLot.getOwner());//.getId() == user.getId();
+        boolean lotIsActive = Lot.ACTIVE.equals(currentLot.getState());
         //add new bid
         isEnabled = !currentUserIsLotOwner && lotIsActive;
         description = isEnabled ? "push to add new bid"
@@ -566,7 +568,7 @@ public class MainWindow extends Window implements BasicWindow {
         }
         log.info("cancel trades for lot: " + currentLot.getName());
         try {
-            auction.cancelLotTrades(currentLot.getId(), userId);
+            auction.cancelLotTrades(currentLot.getId(), user.getId());
         } catch (LotUpdateException e) {
             showInformation(e.getMessage());
             log.warn(e.getMessage());
@@ -582,12 +584,12 @@ public class MainWindow extends Window implements BasicWindow {
     }
 
     private void onAddNewLot() {
-        LotWindow wnd = new LotWindow(this, userId, null);
+        LotWindow wnd = new LotWindow(this, user, null);
         getCurrent().addWindow(wnd);
     }
 
     private void onAddNewBid() {
-        NewBidWindow wnd = new NewBidWindow(this, userId, currentLot);
+        NewBidWindow wnd = new NewBidWindow(this, user, currentLot);
         getCurrent().addWindow(wnd);
     }
 

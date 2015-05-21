@@ -1,219 +1,27 @@
 package ws.dao;
 
-import org.apache.log4j.Logger;
 import ws.model.Lot;
+import ws.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Olga on 22.09.2014.
- */
-public class LotDao {
-    private static final Logger log = Logger.getLogger(LotDao.class);
-    private Connection connection;
+public interface LotDao {
 
-    public LotDao() {
-        connection = DaoUtils.getConnection();
-    }
+    public List<Lot> findAll();
 
+    public List<Lot> findAllByUser(User user);
 
-    public boolean addLot(Lot lot) {
-        boolean result = false;
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("insert into Lots(name, finishDate,startPrice,description,ownerId) values (?, ?, ?, ?,? )");
-            // Parameters start with 1
-            preparedStatement.setString(1, lot.getName());
-            preparedStatement.setTimestamp(2, lot.getSqlFinishDate());
-            preparedStatement.setDouble(3, lot.getStartPrice());
-            preparedStatement.setString(4, lot.getDescription());
-            preparedStatement.setInt(5, lot.getOwnerId());
-            preparedStatement.executeUpdate();
-            result = true;
-        } catch (SQLException e) {
-            // e.printStackTrace();
-            log.error("catch exception:", e);
-        }
-        return result;
-    }
+    public Lot findById(int id);
 
-    public boolean updateLotState(Lot lot) {
-        boolean result = false;
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("update lots set state=? where Id=?");
-            preparedStatement.setString(1, lot.getState());
-            preparedStatement.setInt(2, lot.getId());
-            preparedStatement.executeUpdate();
-            result = true;
-        } catch (SQLException e) {
-            log.error("catch exception:", e);
-        }
-        return result;
-    }
+    public Lot findByIdWithBids(int id);
 
+    public boolean save(Lot lot);
 
-    public List<Lot> getAllLotsForOwner(int ownerId) {
-        List<Lot> lots = new ArrayList<Lot>();
-        try {
-            String sqlQuery = ("select L.id, L.name, L.finishDate," +
-                    " L.startPrice, L.description, L.ownerId," +
-                    " L.state, " +
-                    " concat(O.firstName, ' ', case when O.lastName is null then '' else O.lastName end) as lotOwnerName, " +
-                    " (select MAX(value) from bids where lotId = L.id) as lotMaxBidValue" +
-                    " from lots as L " +
-                    " join users as O on O.id = L.ownerId"
-                    + (ownerId == -1 ? "" : " where ownerId=?"));
-            PreparedStatement preparedStatement = connection.
-                    prepareStatement(sqlQuery);
-            if (ownerId != -1) {
-                preparedStatement.setInt(1, ownerId);
-            }
-            ResultSet rs = preparedStatement.executeQuery();
+    public boolean update(Lot lot);
 
-            while (rs.next()) {
-                Lot lot = new Lot();
-                lot.setId(rs.getInt("id"));
-                lot.setName(rs.getString("name"));
-                lot.setFinishDateFromSql(rs.getTimestamp("finishDate"));
-                lot.setStartPrice(rs.getDouble("startPrice"));
-                lot.setDescription(rs.getString("description"));
-                lot.setOwnerId(rs.getInt("ownerId"));
-                lot.setState(rs.getString("state"));
-                //joined columns
-                lot.setOwnerName(rs.getString("lotOwnerName"));
-                lot.setMaxBidValue(rs.getDouble("lotMaxBidValue"));
-                lots.add(lot);
-            }
-        } catch (SQLException e) {
-            log.error("catch exception:", e);
-        }
-        return lots;
-    }
+    public boolean updateState(Lot lot);
 
+    public boolean delete(Lot lot);
 
-    public Lot getLotById(int lotId) {
-        Lot lot = new Lot();
-        try {
-            PreparedStatement preparedStatement = connection.
-                    prepareStatement("select L.id, L.name, L.finishDate," +
-                            " L.startPrice, L.description, L.ownerId," +
-                            " L.state, " +
-                            " concat(O.firstName, ' ', case when O.lastName is null then '' else O.lastName end) as lotOwnerName" +
-                            " from lots as L " +
-                            " join users as O on O.id = L.ownerId" +
-                            " where L.id=?");
-            preparedStatement.setInt(1, lotId);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if (rs.next()) {
-                lot.setId(rs.getInt("id"));
-                lot.setName(rs.getString("name"));
-                lot.setFinishDateFromSql(rs.getTimestamp("finishDate"));
-                lot.setStartPrice(rs.getDouble("startPrice"));
-                lot.setDescription(rs.getString("description"));
-                lot.setOwnerId(rs.getInt("ownerId"));
-                lot.setState(rs.getString("state"));
-                //
-                lot.setOwnerName(rs.getString("lotOwnerName"));
-            }
-        } catch (SQLException e) {
-            log.error("catch exception:", e);
-        }
-        return lot;
-    }
-
-    public List<Lot> getLots() {//todo norrmal name due function
-        List<Lot> lots = new ArrayList<Lot>();
-        try {
-            String sqlQuery = "select L.id, L.name, L.ownerId, "
-                    + " (select MAX(value) from bids where lotId = L.id) as lotMaxBidValue"
-                    + " from lots as L "
-                    + " where  TIMESTAMPDIFF(MINUTE,finishDate,now() ) >= 0 "    //in past
-                    + " and State = 'Active'";                                  //active (other lots is or cancelled manually, or sold/not sold automatically
-            ;
-            PreparedStatement preparedStatement = connection.
-                    prepareStatement(sqlQuery);
-
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()) {
-                Lot lot = new Lot();
-                lot.setId(rs.getInt("id"));
-                lot.setName(rs.getString("name"));
-                lot.setOwnerId(rs.getInt("ownerId"));
-                lot.setMaxBidValue(rs.getDouble("lotMaxBidValue"));
-                lots.add(lot);
-            }
-        } catch (SQLException e) {
-            log.error("catch exception:", e);
-        }
-        return lots;
-    }
-
-    public boolean updateLot(Lot lot) {
-        boolean result = false;
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("update lots set name=?, finishDate=?,startPrice=?,description=?,ownerId=?,state=?" +
-                            "where Id=?");
-            // Parameters start with 1
-            preparedStatement.setString(1, lot.getName());
-            preparedStatement.setTimestamp(2, lot.getSqlFinishDate());
-            preparedStatement.setDouble(3, lot.getStartPrice());
-            preparedStatement.setString(4, lot.getDescription());
-            preparedStatement.setInt(5, lot.getOwnerId());
-            preparedStatement.setString(6, lot.getState());
-            //id
-            preparedStatement.setInt(7, lot.getId());
-            preparedStatement.executeUpdate();
-            result = true;
-        } catch (SQLException e) {
-            log.error("catch exception:", e);
-        }
-        return result;
-    }
+    public List<Lot> findAllOverdueLots();
 }
-
-//    public void deleteUser(int userId) {
-//        try {
-//            PreparedStatement preparedStatement = connection
-//                    .prepareStatement("delete from users where id=?");
-//            // Parameters start with 1
-//            preparedStatement.setInt(1, userId);
-//            preparedStatement.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            log.error("catch exception:", e);
-//        }
-//    }
-//
-
-
-//    public List<Lot> getAllLots() {
-//        List<Lot> lots = new ArrayList<Lot>();
-//        try {
-//            Statement statement = connection.createStatement();
-//            ResultSet rs = statement.executeQuery("select * from lots");
-//            while (rs.next()) {
-//                Lot lot = new Lot();
-//                lot.setId(rs.getInt("id"));
-//                lot.setName(rs.getString("name"));
-//                lot.setFinishDate(rs.getDate("finishDate"));
-//                lot.setStartPrice(rs.getDouble("startPrice"));
-//                lot.setDescription(rs.getString("description"));
-//                lot.setOwnerId(rs.getInt("ownerId"));
-//                lot.setState(rs.getString("state"));
-//                lots.add(lot);
-//            }
-//        } catch (SQLException e) {
-//            log.error("catch exception:", e);
-//        }
-//
-//        return lots;
-//    }

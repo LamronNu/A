@@ -9,8 +9,9 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
 import util.Consts;
-import ws.general.AuctionWs;
+import ws.general.web.AuctionWebService;
 import ws.model.Lot;
+import ws.model.User;
 
 
 public class NewBidWindow extends Window implements BasicWindow {
@@ -18,19 +19,19 @@ public class NewBidWindow extends Window implements BasicWindow {
     private final Label dollarLabel;
     private final Button btnOk;
     private final BasicWindow parentWindow;
-    private final int ownerId;
+    private final User owner;
     private final Lot lot;
     public TextField bidValueField;
     private String resultType = "";
 
 
-    public NewBidWindow(BasicWindow components, int userId, Lot lot) {
+    public NewBidWindow(BasicWindow components, User user, Lot lot) {
         super("New bid"); // Set window caption
         log.info("start Bid window for lot " + lot.getId());
         center();
         //fields
         parentWindow = components;
-        ownerId = userId;
+        owner = user;
         this.lot = lot;
         // Create the content root layout for the UI
         HorizontalLayout content = new HorizontalLayout();
@@ -104,8 +105,8 @@ public class NewBidWindow extends Window implements BasicWindow {
         log.info("try to create new bid " + bidValue);
         String message = "";
         try {
-            AuctionWs auction = Authentication.getAuctionWebService();
-            boolean IsCreated = auction.createNewBid(bidValue, ownerId, lot.getId());
+            AuctionWebService auction = Authentication.getAuctionWebService();
+            boolean IsCreated = auction.createNewBid(bidValue, owner, lot);
             if (IsCreated) {
                 message = "bid [" + bidValue + "] is created!";
                 log.info(message);

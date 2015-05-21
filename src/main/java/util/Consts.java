@@ -6,14 +6,9 @@ import java.util.Properties;
  * Created by Olga on 22.09.2014.
  */
 public class Consts {
-    //lot states
-    public static final String ACTIVE_LOT_STATE = "Active";
-    public static final String CANCELLED_LOT_STATE = "Cancelled";
-    public static final String SOLD_LOT_STATE = "Sold";
-    public static final String NOT_SOLD_LOT_STATE = "Not sold";
     //webService consts
     public static final String WEB_SERVICE_URL = getWebServiceUrl();
-    public static final String TARGET_NAMESPACE = "http://www.auction-example.herokuapp.com/wsdl";
+    public static final String TARGET_NAMESPACE = "http://www.auction-example.herokuapp.com/ws/wsdl";
 
     //user consts
     public static final String LOGIN_IS_ALREADY_EXISTS_MESSAGE = "USER_LOGIN_IS_ALREADY_EXISTS";
@@ -38,11 +33,12 @@ public class Consts {
         //get profile name
         Properties env = System.getProperties();
         String profile = env.getProperty("profile");
+        System.out.println(">>>>>>>PROFILE: " + profile);
         profile = profile == null ? PROFILE_DEFAULT : profile;
         if ("prod".equals(profile))
             return "http://auction-example.herokuapp.com:80/service";
         else
-            return "http://localhost:8100/service";
+            return "http://localhost:8100/a/service";
 
 //        switch (profile){
 //            case "dev":
